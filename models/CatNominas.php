@@ -45,8 +45,8 @@ class CatNominas extends \yii\db\ActiveRecord
     {
         return [
             'id_nomina' => 'Id Nomina',
-            'txt_nombre' => 'Txt Nombre',
-            'txt_descripcion' => 'Txt Descripcion',
+            'txt_nombre' => 'Nombre',
+            'txt_descripcion' => 'Descripcion',
             'b_habilitado' => 'B Habilitado',
         ];
     }

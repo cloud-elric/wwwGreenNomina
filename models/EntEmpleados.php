@@ -66,13 +66,13 @@ class EntEmpleados extends \yii\db\ActiveRecord
             'id_sucursal' => 'Id Sucursal',
             'id_tipo_contrato' => 'Id Tipo Contrato',
             'id_nomina' => 'Id Nomina',
-            'txt_nombre' => 'Txt Nombre',
-            'txt_observaciones' => 'Txt Observaciones',
-            'txt_rfc' => 'Txt Rfc',
+            'txt_nombre' => 'Nombre',
+            'txt_observaciones' => 'Observaciones',
+            'txt_rfc' => 'Rfc',
             'num_empleado' => 'Num Empleado',
             'num_seguro_social' => 'Num Seguro Social',
-            'fch_alta' => 'Fch Alta',
-            'fch_baja' => 'Fch Baja',
+            'fch_alta' => 'Fecha Alta',
+            'fch_baja' => 'Fecha Baja',
             'b_habilitado' => 'B Habilitado',
         ];
     }
