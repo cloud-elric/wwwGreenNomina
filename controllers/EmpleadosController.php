@@ -101,7 +101,9 @@ class EmpleadosController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $empleado = $this->findModel($id);
+        $empleado->b_habilitado = 0;
+        $empleado->save();
 
         return $this->redirect(['index']);
     }

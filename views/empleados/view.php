@@ -31,13 +31,16 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
         	[	
         		'attribute' => 'id_sucursal',
-        		'value' => function($data){
-            		$sucursal = CatSucursales::find()->where(['id_sucursal'=>$data->id_sucursal])->one();
-            		return $sucursal->txt_nombre;
-    			}
+        		'value' => $model->idSucursal->txt_nombre,	
     		],
-            'id_tipo_contrato',
-            'id_nomina',
+        	[
+        		'attribute' => 'id_tipo_contrato',
+        		'value' => $model->idTipoContrato->txt_nombre
+    		],
+            [
+            	'attribute' => 'id_nomina',
+            	'value' => $model->idNomina->txt_nombre
+		    ],
             'txt_nombre',
             'txt_observaciones:ntext',
             'txt_rfc',

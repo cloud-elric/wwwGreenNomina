@@ -41,7 +41,7 @@ class CatBancosSearch extends CatBancos
      */
     public function search($params)
     {
-        $query = CatBancos::find();
+        $query = CatBancos::find()->where(['b_habilitado'=>1]);
 
         // add conditions that should always apply here
 

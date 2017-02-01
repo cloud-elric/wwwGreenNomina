@@ -101,7 +101,9 @@ class CatBancosController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $banco = $this->findModel($id);
+        $banco->b_habilitado = 0;
+        $banco->save();
 
         return $this->redirect(['index']);
     }

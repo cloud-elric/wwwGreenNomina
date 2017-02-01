@@ -41,7 +41,7 @@ class CatTiposContratosSearch extends CatTiposContratos
      */
     public function search($params)
     {
-        $query = CatTiposContratos::find();
+        $query = CatTiposContratos::find()->where(['b_habilitado'=>1]);
 
         // add conditions that should always apply here
 

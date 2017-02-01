@@ -101,7 +101,9 @@ class CatSucursalesController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $sucursal = $this->findModel($id);
+        $sucursal->b_habilitado = 0;
+        $sucursal->save();
 
         return $this->redirect(['index']);
     }

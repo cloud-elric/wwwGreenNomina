@@ -101,7 +101,9 @@ class CatTiposContratosController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $contrato = $this->findModel($id);
+        $contrato->b_habilitado = 0;
+        $contrato->save();
 
         return $this->redirect(['index']);
     }
