@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\CatTiposContratosSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Cat Tipos Contratos';
+$this->title = 'Contratos';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="cat-tipos-contratos-index">
@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Cat Tipos Contratos', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Crear Contrato', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -24,10 +24,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id_tipo_contrato',
+            //'id_tipo_contrato',
             'txt_nombre',
             'txt_descripcion',
-            'b_habilitado',
+            //'b_habilitado',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

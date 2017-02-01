@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\EntEmpleados */
 
-$this->title = 'Create Ent Empleados';
-$this->params['breadcrumbs'][] = ['label' => 'Ent Empleados', 'url' => ['index']];
+$this->title = 'Crear Empleado';
+$this->params['breadcrumbs'][] = ['label' => 'Empleados', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="ent-empleados-create">

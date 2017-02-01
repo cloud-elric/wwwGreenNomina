@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\EntEmpleadosSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Ent Empleados';
+$this->title = 'Empleados';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="ent-empleados-index">
@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Ent Empleados', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Crear Empleado', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -24,17 +24,17 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id_empleado',
+//             'id_empleado',
             'id_sucursal',
             'id_tipo_contrato',
             'id_nomina',
             'txt_nombre',
-            // 'txt_observaciones:ntext',
-            // 'txt_rfc',
-            // 'num_empleado',
-            // 'num_seguro_social',
-            // 'fch_alta',
-            // 'fch_baja',
+            'txt_observaciones:ntext',
+            'txt_rfc',
+//             'num_empleado',
+//             'num_seguro_social',
+//             'fch_alta',
+//             'fch_baja',
             // 'b_habilitado',
 
             ['class' => 'yii\grid\ActionColumn'],

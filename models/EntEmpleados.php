@@ -63,9 +63,9 @@ class EntEmpleados extends \yii\db\ActiveRecord
     {
         return [
             'id_empleado' => 'Id Empleado',
-            'id_sucursal' => 'Id Sucursal',
-            'id_tipo_contrato' => 'Id Tipo Contrato',
-            'id_nomina' => 'Id Nomina',
+            'id_sucursal' => 'Sucursal',
+            'id_tipo_contrato' => 'Tipo Contrato',
+            'id_nomina' => 'Nomina',
             'txt_nombre' => 'Nombre',
             'txt_observaciones' => 'Observaciones',
             'txt_rfc' => 'Rfc',

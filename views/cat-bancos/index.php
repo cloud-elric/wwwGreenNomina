@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\CatBancosSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Cat Bancos';
+$this->title = 'Bancos';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="cat-bancos-index">
@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Cat Bancos', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Crear Banco', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -24,10 +24,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id_banco',
+            //'id_banco',
             'txt_nombre',
             'txt_descripcion',
-            'b_habilitado',
+            //'b_habilitado',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

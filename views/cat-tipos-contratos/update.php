@@ -5,10 +5,10 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\CatTiposContratos */
 
-$this->title = 'Update Cat Tipos Contratos: ' . $model->id_tipo_contrato;
-$this->params['breadcrumbs'][] = ['label' => 'Cat Tipos Contratos', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id_tipo_contrato, 'url' => ['view', 'id' => $model->id_tipo_contrato]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->title = 'Actualizar Contrato: ' . $model->id_tipo_contrato;
+$this->params['breadcrumbs'][] = ['label' => 'Contratos', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => $model->txt_nombre, 'url' => ['view', 'id' => $model->id_tipo_contrato]];
+$this->params['breadcrumbs'][] = 'Actualizar';
 ?>
 <div class="cat-tipos-contratos-update">
 

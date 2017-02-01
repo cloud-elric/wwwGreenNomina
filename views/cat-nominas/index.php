@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\CatNominasSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Cat Nominas';
+$this->title = 'Nominas';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="cat-nominas-index">
@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Cat Nominas', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Crear Nomina', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -24,10 +24,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id_nomina',
+            //'id_nomina',
             'txt_nombre',
             'txt_descripcion',
-            'b_habilitado',
+            //'b_habilitado',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

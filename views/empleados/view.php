@@ -2,12 +2,13 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use app\models\CatSucursales;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\EntEmpleados */
 
-$this->title = $model->id_empleado;
-$this->params['breadcrumbs'][] = ['label' => 'Ent Empleados', 'url' => ['index']];
+$this->title = $model->txt_nombre;
+$this->params['breadcrumbs'][] = ['label' => 'Empleados', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="ent-empleados-view">
@@ -15,11 +16,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id_empleado], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id_empleado], [
+        <?= Html::a('Actualizar', ['update', 'id' => $model->id_empleado], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Eliminar', ['delete', 'id' => $model->id_empleado], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => 'Estas seguro de que quieres eleminar este elemento?',
                 'method' => 'post',
             ],
         ]) ?>
@@ -28,8 +29,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id_empleado',
-            'id_sucursal',
+        	[	
+        		'attribute' => 'id_sucursal',
+        		'value' => function($data){
+            		$sucursal = CatSucursales::find()->where(['id_sucursal'=>$data->id_sucursal])->one();
+            		return $sucursal->txt_nombre;
+    			}
+    		],
             'id_tipo_contrato',
             'id_nomina',
             'txt_nombre',
@@ -39,8 +45,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'num_seguro_social',
             'fch_alta',
             'fch_baja',
-            'b_habilitado',
+//             'b_habilitado',
         ],
-    ]) ?>
+    ])?>
 
 </div>
