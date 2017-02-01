@@ -7,6 +7,7 @@ $config = [
 		'bootstrap' => [ 
 				'log' 
 		],
+		'language' => 'es',
 		'components' => [ 
 				'session' => [ 
 						'timeout' => 3600 
