@@ -8,6 +8,8 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\EntEmpleados;
+use app\models\ViewEmpleadoCompleto;
 
 class SiteController extends Controller
 {
@@ -121,5 +123,16 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
+    }
+    
+    public function actionEmpleadoQuincena($idEm){
+    	//$this->layout = false;
+    	$empleado = ViewEmpleadoCompleto::find()->where(['id_empleado'=>$idEm])->all();
+//     	echo count($empleado);
+//     	exit();
+    	
+    	return $this->render('empleadoQuincena',[
+    		'empleado' => $empleado
+    	]);
     }
 }
