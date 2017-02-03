@@ -41,7 +41,7 @@ class CatNominasSearch extends CatNominas
      */
     public function search($params)
     {
-        $query = CatNominas::find();
+        $query = CatNominas::find()->where(['b_habilitado'=>1]);
 
         // add conditions that should always apply here
 

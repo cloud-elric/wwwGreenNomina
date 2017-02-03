@@ -101,7 +101,9 @@ class CatNominasController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $nomina = $this->findModel($id);
+        $nomina->b_habilitado = 0;
+        $nomina->save();
 
         return $this->redirect(['index']);
     }

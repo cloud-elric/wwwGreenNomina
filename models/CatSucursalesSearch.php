@@ -41,7 +41,7 @@ class CatSucursalesSearch extends CatSucursales
      */
     public function search($params)
     {
-        $query = CatSucursales::find();
+        $query = CatSucursales::find()->where(['b_habilitado'=>1]);
 
         // add conditions that should always apply here
 

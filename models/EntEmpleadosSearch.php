@@ -41,7 +41,7 @@ class EntEmpleadosSearch extends EntEmpleados
      */
     public function search($params)
     {
-        $query = EntEmpleados::find();
+        $query = EntEmpleados::find()->where(['b_habilitado'=>1]);
 
         // add conditions that should always apply here
 
