@@ -10,6 +10,8 @@ use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\EntEmpleados;
 use app\models\ViewEmpleadoCompleto;
+use app\models\WrkDeduccionesEmpleado;
+use app\models\WrkPagosExtras;
 
 class SiteController extends Controller
 {
@@ -125,14 +127,34 @@ class SiteController extends Controller
         return $this->render('about');
     }
     
-    public function actionEmpleadoQuincena($idEm){
-    	//$this->layout = false;
-    	$empleado = ViewEmpleadoCompleto::find()->where(['id_empleado'=>$idEm])->all();
-//     	echo count($empleado);
+    public function actionEmpleadoQuincena(){
+    	$this->enableCsrfValidation = false;
+    	
+    	$session = Yii::$app->session;
+    	$usu = $_POST['usu'];
+    	$pass = $_POST['pass'];
+    	
+//     	echo $usu;
+//     	echo $pass;
 //     	exit();
+
+    	$emp = EntEmpleados::find()->where(['txt_usuario'=>$usu])->andWhere(['txt_password'=>$pass])->one();
+    	$session->set('empleado', $emp->id_empleado);
+    	$idEm = $session->get('empleado');
+    	
+    	$empleado = ViewEmpleadoCompleto::find()->where(['id_empleado'=>$idEm])->all();
+    	$deducciones = WrkDeduccionesEmpleado::find()->where(['id_empleado'=>$idEm])->all();
+    	$extras = WrkPagosExtras::find()->where(['id_empleado'=>$idEm])->all();
     	
     	return $this->render('empleadoQuincena',[
-    		'empleado' => $empleado
+    		'empleado' => $empleado,
+    		'deducciones' => $deducciones,
+    		'extras' => $extras
     	]);
+    }
+    
+    public function actionLoginEmpleados(){
+    	
+    	return $this->render('loginEmpleados');
     }
 }

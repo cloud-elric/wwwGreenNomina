@@ -48,10 +48,10 @@ class EntDatosBancarios extends \yii\db\ActiveRecord
     {
         return [
             'id_dato_bancario' => 'Id Dato Bancario',
-            'id_banco' => 'Id Banco',
-            'id_empleado' => 'Id Empleado',
-            'txt_numero_cuenta' => 'Txt Numero Cuenta',
-            'txt_clabe' => 'Txt Clabe',
+            'id_banco' => 'Banco',
+            'id_empleado' => 'Empleado',
+            'txt_numero_cuenta' => 'Numero de Cuenta',
+            'txt_clabe' => 'Clabe',
             'b_habilitado' => 'B Habilitado',
         ];
     }

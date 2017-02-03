@@ -47,8 +47,26 @@ $this->params['breadcrumbs'][] = $this->title;
             'num_empleado',
             'num_seguro_social',
             'fch_alta',
-            'fch_baja',
-//             'b_habilitado',
+        	[
+        		'attribute' => 'banco',
+        		'value' => $model->entDatosBancarios->idBanco->txt_nombre
+        	],
+        	[
+        		'attribute' => 'cuenta',
+        		'value' => $model->entDatosBancarios->txt_numero_cuenta
+        	],
+        	[
+        		'attribute' => 'clabe',
+        		'value' => $model->entDatosBancarios->txt_clabe
+        	],
+        	[
+        		'attribute' => 'Telefono',
+        		'value' => $model->entEmpleadosContactos->txt_telefono_contacto
+        	],
+        	[
+        		'attribute' => 'Email',
+        		'value' => $model->entEmpleadosContactos->txt_mail_contacto
+        	],
         ],
     ])?>
 

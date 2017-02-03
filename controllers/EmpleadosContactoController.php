@@ -3,18 +3,16 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\EntEmpleados;
-use app\models\EntEmpleadosSearch;
+use app\models\EntEmpleadosContactos;
+use app\models\EntEmpleadosContactoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use app\models\EntDatosBancarios;
-use app\models\EntEmpleadosContactos;
 
 /**
- * EmpleadosController implements the CRUD actions for EntEmpleados model.
+ * EmpleadosCompletoController implements the CRUD actions for EntEmpleadosContactos model.
  */
-class EmpleadosController extends Controller
+class EmpleadosContactoController extends Controller
 {
     /**
      * @inheritdoc
@@ -32,12 +30,12 @@ class EmpleadosController extends Controller
     }
 
     /**
-     * Lists all EntEmpleados models.
+     * Lists all EntEmpleadosContactos models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new EntEmpleadosSearch();
+        $searchModel = new EntEmpleadosContactoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -47,52 +45,37 @@ class EmpleadosController extends Controller
     }
 
     /**
-     * Displays a single EntEmpleados model.
+     * Displays a single EntEmpleadosContactos model.
      * @param string $id
      * @return mixed
      */
     public function actionView($id)
     {
-    	$model2 = EntDatosBancarios::find()->where(['id_empleado'=>$id])->one();
-    	$model3 = EntEmpleadosContactos::find()->where(['id_empleado'=>$id])->one();
-    	
         return $this->render('view', [
             'model' => $this->findModel($id),
-        	'model2' => $model2,
-        	'model3' => $model3
         ]);
     }
 
     /**
-     * Creates a new EntEmpleados model.
+     * Creates a new EntEmpleadosContactos model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new EntEmpleados();
-        $model2 = new EntDatosBancarios();
-        $model3 = new EntEmpleadosContactos();
+        $model = new EntEmpleadosContactos();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-        	$model2->id_empleado = $model->id_empleado;
-        	$model3->id_empleado = $model->id_empleado;
-        	if($model2->load(Yii::$app->request->post()) && $model2->save()){
-        		if($model3->load(Yii::$app->request->post()) && $model3->save()){
-            		return $this->redirect(['view', 'id' => $model->id_empleado]);
-        		}
-        	}
-        }else {
+            return $this->redirect(['view', 'id' => $model->id_empleado]);
+        } else {
             return $this->render('create', [
                 'model' => $model,
-            	'model2' => $model2,
-            	'model3' => $model3
             ]);
         }
     }
 
     /**
-     * Updates an existing EntEmpleados model.
+     * Updates an existing EntEmpleadosContactos model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param string $id
      * @return mixed
@@ -111,30 +94,28 @@ class EmpleadosController extends Controller
     }
 
     /**
-     * Deletes an existing EntEmpleados model.
+     * Deletes an existing EntEmpleadosContactos model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param string $id
      * @return mixed
      */
     public function actionDelete($id)
     {
-        $empleado = $this->findModel($id);
-        $empleado->b_habilitado = 0;
-        $empleado->save();
+        $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }
 
     /**
-     * Finds the EntEmpleados model based on its primary key value.
+     * Finds the EntEmpleadosContactos model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param string $id
-     * @return EntEmpleados the loaded model
+     * @return EntEmpleadosContactos the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = EntEmpleados::findOne($id)) !== null) {
+        if (($model = EntEmpleadosContactos::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

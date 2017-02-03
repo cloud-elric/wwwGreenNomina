@@ -82,7 +82,8 @@ class EntEmpleados extends \yii\db\ActiveRecord
      */
     public function getEntDatosBancarios()
     {
-        return $this->hasMany(EntDatosBancarios::className(), ['id_empleado' => 'id_empleado']);
+        //return $this->hasMany(EntDatosBancarios::className(), ['id_empleado' => 'id_empleado'])->where(['b_habilitado'=>1]);
+    	return $this->hasOne(EntDatosBancarios::className(), ['id_empleado' => 'id_empleado'])->where(['b_habilitado'=>1]);
     }
 
     /**

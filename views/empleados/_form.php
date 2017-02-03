@@ -6,6 +6,8 @@ use app\models\CatSucursales;
 use yii\helpers\ArrayHelper;
 use app\models\CatTiposContratos;
 use app\models\CatNominas;
+use yii\web\View;
+use app\models\CatBancos;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\EntEmpleados */
@@ -34,12 +36,21 @@ use app\models\CatNominas;
 
     <?= $form->field($model, 'fch_alta')->textInput() ?>
 
-    <?= $form->field($model, 'fch_baja')->textInput() ?>
+    <?= $form->field($model2, 'id_banco')->dropDownList(ArrayHelper::map(CatBancos::find()->asArray()->all(), 'id_banco', 'txt_nombre'), ['prompt' => 'Seleccionar banco']) ?>
+
+    <?= $form->field($model2, 'txt_numero_cuenta')->textarea(['rows' => 6]) ?>
+
+    <?= $form->field($model2, 'txt_clabe')->textarea(['rows' => 6]) ?>
+    
+    <?= $form->field($model3, 'txt_telefono_contacto')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model3, 'txt_mail_contacto')->textInput(['maxlength' => true]) ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Crear' : 'Actualizar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? 'Crear' : 'Actualizar', ['id' => 'btn_submit_empleado', 'class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
 
 </div>
+

@@ -1,11 +1,9 @@
 <?php
 use app\models\CatBancos;
-use app\models\WrkDeduccionesEmpleado;
-use app\models\WrkPagosExtras;
 
 $count_tabla = count($empleado);
 $usuario = null;
-if($count_tabla > 1){
+if($count_tabla >= 1){
 	foreach($empleado as $emp){
 		$usuario = $emp;
 		break;
@@ -52,8 +50,6 @@ if($count_tabla > 1){
 </table>
 
 <?php 
-$deducciones = WrkDeduccionesEmpleado::find()->where(['id_empleado'=>$usuario->id_empleado])->all();
-$extras = WrkPagosExtras::find()->where(['id_empleado'=>$usuario->id_empleado])->all();
 $totalExtra = 0;
 $totalDeduccion = 0;
 ?>
@@ -70,7 +66,7 @@ $totalDeduccion = 0;
 				<th>Concepto</th>
 				<th>Monto</th>
 			</tr>
-			<?php if(count($extras) > 1){
+			<?php if(count($extras) >= 1){
 				foreach($extras as $ext){
 			?>
 					<tr>
@@ -87,7 +83,7 @@ $totalDeduccion = 0;
 					<td><?= $extras->num_monto?></td>
 				</tr>
 			<?php 
-				$totalExtra += $extra->num_monto;
+				$totalExtra += $extras->num_monto;
 			}
 			?>
 			<tr>
@@ -112,7 +108,14 @@ $totalDeduccion = 0;
 			<?php 
 					$totalDeduccion += $decc->num_monto;
 				}
-			}else{		
+			}else if(Count($deducciones == 0)){
+			?>
+				<tr>
+					<td></td>
+					<td></td>
+				</tr>
+			<?php		
+			}else{
 			?>
 				<tr>
 					<td><?= $deducciones->txt_concepto?></td>

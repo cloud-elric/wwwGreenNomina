@@ -41,8 +41,8 @@ class EntEmpleadosContactos extends \yii\db\ActiveRecord
     {
         return [
             'id_empleado' => 'Id Empleado',
-            'txt_telefono_contacto' => 'Txt Telefono Contacto',
-            'txt_mail_contacto' => 'Txt Mail Contacto',
+            'txt_telefono_contacto' => 'Telefono',
+            'txt_mail_contacto' => 'Email',
         ];
     }
 
