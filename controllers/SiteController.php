@@ -21,6 +21,8 @@ use app\models\CatSucursales;
 use app\models\CatTiposContratos;
 use app\models\EntEmpleadosContactos;
 use app\models\EntDatosBancarios;
+use app\models\WrkPagosEmpleados;
+use app\modules\ModUsuarios\models\Utils;
 
 class SiteController extends Controller {
 	/**
@@ -172,6 +174,14 @@ class SiteController extends Controller {
 			'txt_mail_contacto' => 38 
 	];
 	
+	public $columnasPago = [
+			'num_dias_trabajados'=>18,
+			'num_sueldo'=>19,
+			'num_total_sueldo_fijo'=>20,
+			'num_facturacion'=>21,
+			'fch_pago'=>40,
+	];
+	
 	/**
 	 */
 	public function actionUploadFile() {
@@ -215,7 +225,7 @@ class SiteController extends Controller {
 				$empleado = $this->loadEmpleados($objWorksheet, $row, $sucursales->id_sucursal, $tiposContratos->id_tipo_contrato, $nomina->id_nomina);
 				$datosBancario = $this->loadDatosBancarios ( $objWorksheet, $row, $empleado->id_empleado, $banco->id_banco);
 				$contacto = $this->loadEmpleadosContactos ( $objWorksheet, $row, $empleado->id_empleado );
-				
+				$pago = $this->loadPago($objWorksheet, $row, $empleado->id_empleado, $banco->id_banco, $sucursales->id_sucursal, $tiposContratos->id_tipo_contrato, $nomina->id_nomina);
 				
 			}
 			echo ':D';
@@ -367,6 +377,7 @@ class SiteController extends Controller {
 		$empleado->save ();
 		
 		return $empleado;
+		
 	}
 	
 	/**
@@ -387,6 +398,7 @@ class SiteController extends Controller {
 			$datosBancario->id_banco = $idBanco;
 			$datosBancario->id_empleado = $idEmpleado;
 			$datosBancario->txt_clabe = $clabe;
+			$datosBancario->txt_numero_cuenta = $numeroCuenta;
 			$datosBancario->save();
 		}
 		
@@ -413,10 +425,61 @@ class SiteController extends Controller {
 			$contacto->txt_telefono_contacto = $telefono;
 			$contacto->txt_mail_contacto = $mail;
 			$contacto->save();
+			
+			
 		}
 		
 		return $contacto;
 		
+	}
+	
+	/**
+	 * 
+	 * @param unknown $objWorksheet
+	 * @param unknown $row
+	 * @param unknown $idEmpleado
+	 * @param unknown $idBanco
+	 * @param unknown $idSucursal
+	 * @param unknown $idTipoContrato
+	 * @param unknown $idNomina
+	 * @return \app\models\WrkPagosEmpleados|\yii\db\ActiveRecord|NULL
+	 */
+	public function loadPago($objWorksheet, $row, $idEmpleado,$idBanco, $idSucursal, $idTipoContrato, $idNomina){
+		$diasTrabajados= $objWorksheet->getCellByColumnAndRow ( $this->columnasPago['num_dias_trabajados'], $row )->getCalculatedValue ();
+		$sueldo = $objWorksheet->getCellByColumnAndRow ( $this->columnasPago['num_sueldo'], $row )->getCalculatedValue ();
+		$sueldoFijo = $objWorksheet->getCellByColumnAndRow ( $this->columnasPago['num_total_sueldo_fijo'], $row )->getCalculatedValue ();
+		$facturacion = $objWorksheet->getCellByColumnAndRow ( $this->columnasPago['num_facturacion'], $row )->getCalculatedValue ();
+		$fechaPago = $objWorksheet->getCellByColumnAndRow ( $this->columnasPago['fch_pago'], $row )->getCalculatedValue ();
+		
+	if (\PHPExcel_Shared_Date::isDateTime ( $objWorksheet->getCellByColumnAndRow ( $this->columnasPago['fch_pago'], $row ) )) {
+			$InvDate = $objWorksheet->getCellByColumnAndRow ( $this->columnasPago['fch_pago'], $row )->getValue ();
+			$fechaPago = date ( "Y-m-d H:i:s", \PHPExcel_Shared_Date::ExcelToPHP ( $InvDate ) ) ;
+				
+		} else {
+		
+			$fechaPago = Utils::getFechaActual();
+		}
+		
+		$ultimoPago = WrkPagosEmpleados::find()->where(['id_empleado'=>$idEmpleado])->orderBy('fch_pago DESC')->one();
+		
+		if(!$ultimoPago){
+			$ultimoPago = new WrkPagosEmpleados();
+			
+		}
+		
+		$ultimoPago->id_empleado = $idEmpleado;
+		$ultimoPago->id_banco = $idBanco;
+		$ultimoPago->id_nomina = $idNomina;
+		$ultimoPago->id_sucursal = $idSucursal;
+		$ultimoPago->id_tipo_contrato = $idTipoContrato;
+		$ultimoPago->num_dias_trabajados = $diasTrabajados;
+		$ultimoPago->num_sueldo = $sueldo;
+		$ultimoPago->num_total_sueldo_fijo = $sueldoFijo;
+		$ultimoPago->num_facturacion = $facturacion;
+		$ultimoPago->fch_pago = $fechaPago;
+			
+		$ultimoPago->save();
+		return $ultimoPago;
 	}
 	
 	public function actionEmpleadoQuincena(){

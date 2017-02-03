@@ -35,7 +35,6 @@ class EntDatosBancarios extends \yii\db\ActiveRecord
         return [
             [['id_banco', 'id_empleado', 'b_habilitado'], 'integer'],
             [['id_empleado'], 'required'],
-            [['txt_numero_cuenta', 'txt_clabe'], 'string'],
             [['id_banco'], 'exist', 'skipOnError' => true, 'targetClass' => CatBancos::className(), 'targetAttribute' => ['id_banco' => 'id_banco']],
             [['id_empleado'], 'exist', 'skipOnError' => true, 'targetClass' => EntEmpleados::className(), 'targetAttribute' => ['id_empleado' => 'id_empleado']],
         ];

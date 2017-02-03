@@ -37,7 +37,7 @@ class WrkPagosEmpleados extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_empleado', 'id_banco', 'id_nomina', 'id_sucursal', 'id_tipo_contrato'], 'required'],
+            [['id_empleado'], 'required'],
             [['id_empleado', 'id_banco', 'id_nomina', 'id_sucursal', 'id_tipo_contrato'], 'integer'],
             [['fch_pago'], 'safe'],
             [['id_empleado'], 'exist', 'skipOnError' => true, 'targetClass' => EntEmpleados::className(), 'targetAttribute' => ['id_empleado' => 'id_empleado']],

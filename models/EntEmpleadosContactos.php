@@ -29,7 +29,7 @@ class EntEmpleadosContactos extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['txt_telefono_contacto', 'txt_mail_contacto'], 'string', 'max' => 100],
+            
             [['id_empleado'], 'exist', 'skipOnError' => true, 'targetClass' => EntEmpleados::className(), 'targetAttribute' => ['id_empleado' => 'id_empleado']],
         ];
     }

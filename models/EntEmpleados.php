@@ -47,9 +47,7 @@ class EntEmpleados extends \yii\db\ActiveRecord
             [['txt_nombre'], 'required'],
             [['txt_observaciones'], 'string'],
             [['fch_alta', 'fch_baja'], 'safe'],
-            [['txt_nombre'], 'string', 'max' => 100],
-            [['txt_rfc'], 'string', 'max' => 13],
-            [['num_seguro_social'], 'string', 'max' => 20],
+            
             [['id_nomina'], 'exist', 'skipOnError' => true, 'targetClass' => CatNominas::className(), 'targetAttribute' => ['id_nomina' => 'id_nomina']],
             [['id_sucursal'], 'exist', 'skipOnError' => true, 'targetClass' => CatSucursales::className(), 'targetAttribute' => ['id_sucursal' => 'id_sucursal']],
             [['id_tipo_contrato'], 'exist', 'skipOnError' => true, 'targetClass' => CatTiposContratos::className(), 'targetAttribute' => ['id_tipo_contrato' => 'id_tipo_contrato']],
