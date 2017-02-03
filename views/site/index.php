@@ -20,7 +20,7 @@ $this->title = 'Nomina';
 		</a>
 	</div>
 	<div class="col-md-4">
-		<a href="">
+		<a href="<?=Yii::$app->urlManager->createAbsoluteUrl ( ['site/subir-archivo'] );?>">
 			<div class="widget widget-shadow" id="widgetLineareaOne">
 				<div class="widget-content">
 					<div class="padding-20 padding-top-10">
