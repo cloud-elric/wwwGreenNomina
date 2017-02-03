@@ -76,8 +76,13 @@ $totalDeduccion = 0;
 			<?php 
 					$totalExtra += $ext->num_monto;
 				}
-			}else {		
+			}else if(count($extras) == 0){		
 			?>
+				<tr>
+					<td></td>
+					<td></td>
+				</tr>
+			<?php }else{?>
 				<tr>
 					<td><?= $extras->txt_concepto?></td>
 					<td><?= $extras->num_monto?></td>

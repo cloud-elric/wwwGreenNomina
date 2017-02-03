@@ -446,6 +446,8 @@ class SiteController extends Controller {
     }
     
     public function actionLoginEmpleados(){
+    	$session = Yii::$app->session;
+    	$session->set('empleado', []);
     	
     	return $this->render('loginEmpleados');
     }
