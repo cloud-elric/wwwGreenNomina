@@ -1,6 +1,10 @@
 <?php
 use yii\grid\GridView;
 use yii\helpers\Html;
+
+$this->title = 'Pagos';
+$this->params['breadcrumbs'][] = ['label' => 'Empleados', 'url' => ['index']];
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <?php \yii\widgets\Pjax::begin(); ?>

@@ -48,9 +48,9 @@ class WrkPagosExtras extends \yii\db\ActiveRecord
         return [
             'id_pago_extra' => 'Id Pago Extra',
             'id_empleado' => 'Id Empleado',
-            'id_nomina' => 'Id Nomina',
-            'txt_concepto' => 'Txt Concepto',
-            'num_monto' => 'Num Monto',
+            'id_nomina' => 'Nomina',
+            'txt_concepto' => 'Concepto',
+            'num_monto' => 'Monto',
         ];
     }
 

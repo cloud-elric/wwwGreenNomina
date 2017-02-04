@@ -181,4 +181,31 @@ class EmpleadosController extends Controller
     		'dataProvider' => $dataProvider
     	]);
     }
+    
+    public function actionViewPagoExtra($id){
+    	$extra = WrkPagosExtras::find()->where(['id_pago_extra'=>$id])->one();
+    	
+    	return $this->render('viewPagosExtras',[
+    		'extra' => $extra
+    	]);
+    }
+    
+    public function actionUpdatePagoExtra($id){
+    	$extra = WrkPagosExtras::find()->where(['id_pago_extra'=>$id])->one();
+    	
+    	if ($extra->load(Yii::$app->request->post()) && $extra->save()) {
+    		return $this->redirect(['view-pago-extra', 'id' => $extra->id_pago_extra]);
+    	}
+    	
+    	return $this->render('updatePagosExtras',[
+    		'extra' => $extra
+    	]);
+    }
+    
+    public function actionDeletePagoExtra($id){
+    	$extra = WrkPagosExtras::find()->where(['id_pago_extra'=>$id])->one();
+    	$id = $extra->id_empleado;
+    	$extra->delete();
+    	return $this->redirect(['agregar-pago','id'=>$id ]);
+    }
 }
