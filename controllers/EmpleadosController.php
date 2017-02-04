@@ -10,6 +10,9 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\models\EntDatosBancarios;
 use app\models\EntEmpleadosContactos;
+use app\models\WrkPagosEmpleados;
+use yii\data\ActiveDataProvider;
+use app\models\WrkPagosExtras;
 
 /**
  * EmpleadosController implements the CRUD actions for EntEmpleados model.
@@ -139,5 +142,43 @@ class EmpleadosController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+    
+    public function actionPagosExtras($id){
+    	$pagos = WrkPagosEmpleados::find()->where(['id_empleado'=>$id]);
+    	$dataProvider = new ActiveDataProvider([
+    			'query' => $pagos,
+    	]);
+    	
+    	return $this->render('pagosExtras',[
+    		'dataProvider' => $dataProvider
+    	]);
+    }
+    
+    public function actionAgregarPago($id){
+    	$extras = new WrkPagosExtras();
+    	$extras->id_empleado = $id;
+    	
+    	$pagos = WrkPagosExtras::find()->where(['id_empleado'=>$id]);
+    	$dataProvider = new ActiveDataProvider([
+    			'query' => $pagos,
+    	]);
+    	
+    	if ($extras->load(Yii::$app->request->post()) && $extras->save()) {
+    		$extras2 = new WrkPagosExtras();
+    		$extras2->id_empleado = $id;
+    		 
+    		$pagos2 = WrkPagosExtras::find()->where(['id_empleado'=>$id]);
+    		$dataProvider = new ActiveDataProvider([
+    				'query' => $pagos2,
+    		]);
+    		
+    		return $this->redirect(['agregar-pago','id'=>$id ]);
+    	}
+    	
+    	return $this->render('agregarPagos',[
+    		'extras' => $extras,
+    		'dataProvider' => $dataProvider
+    	]);
     }
 }
