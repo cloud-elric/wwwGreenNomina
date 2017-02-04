@@ -355,6 +355,8 @@ class SiteController extends Controller {
 		
 		if (empty ( $empleado )) {
 			$empleado = new EntEmpleados ();
+			$empleado->txt_usuario = $this->random_username($nombreEmpleado);
+			$empleado->txt_password = $this->randomPassword();
 		}
 		
 		$empleado->id_sucursal = $idSucursal;
@@ -367,8 +369,6 @@ class SiteController extends Controller {
 		$empleado->num_seguro_social = $numSeguroSocial;
 		$empleado->fch_alta = $fchAlta;
 		$empleado->fch_baja = $fchBaja;
-		$empleado->txt_usuario = $this->random_username($nombreEmpleado);
-		$empleado->txt_password = $this->randomPassword();
 		$empleado->save ();
 		
 		return $empleado;
@@ -468,7 +468,7 @@ class SiteController extends Controller {
 		
 		if (\PHPExcel_Shared_Date::isDateTime ( $objWorksheet->getCellByColumnAndRow ( $this->columnasPago ['fch_pago'], $row ) )) {
 			$InvDate = $objWorksheet->getCellByColumnAndRow ( $this->columnasPago ['fch_pago'], $row )->getValue ();
-			$fechaPago = date ( "Y-m-d H:i:s", \PHPExcel_Shared_Date::ExcelToPHP ( $InvDate ) );
+			$fechaPago = date ( "Y-m-d", \PHPExcel_Shared_Date::ExcelToPHP ( $InvDate ) );
 		} else {
 			
 			$fechaPago = Utils::getFechaActual ();
@@ -500,36 +500,61 @@ class SiteController extends Controller {
 		$this->enableCsrfValidation = false;
 		
 		$session = Yii::$app->session;
-		$usu = $_POST ['usu'];
-		$pass = $_POST ['pass'];
+		$usu = null;
+		$pass = null;
+		
+		
+		
+			if($sesionEmpleado = $session->get ( 'empleado')){
+				$usu = $sesionEmpleado->txt_usuario;
+				$pass = $sesionEmpleado->txt_password;
+			}else if(isset($_POST ['usu']) && $_POST ['pass']){
+				$usu = $_POST ['usu'];
+				$pass = $_POST['pass'];
+			}
+			
+		
+		
+		$empleado = $session->get ( 'empleado' );
+		
 		
 		// echo $usu;
 		// echo $pass;
 		// exit();
 		
 		$emp = EntEmpleados::find ()->where ( [ 
-				'txt_usuario' => $usu 
+				'txt_usuario' =>  $usu
 		] )->andWhere ( [ 
-				'txt_password' => $pass 
+				'txt_password' => $pass
 		] )->one ();
-		$session->set ( 'empleado', $emp->id_empleado );
-		$idEm = $session->get ( 'empleado' );
+		
+		if(empty($emp)){
+			
+			return $this->redirect(['login-empleados']);
+		}
+		
+		$session->set ( 'empleado', $emp);
+		
 		
 		$empleado = ViewEmpleadoCompleto::find ()->where ( [ 
-				'id_empleado' => $idEm 
+				'id_empleado' => $emp->id_empleado, 
 		] )->all ();
 		$deducciones = WrkDeduccionesEmpleado::find ()->where ( [ 
-				'id_empleado' => $idEm 
+				'id_empleado' => $emp->id_empleado 
 		] )->all ();
 		$extras = WrkPagosExtras::find ()->where ( [ 
-				'id_empleado' => $idEm 
+				'id_empleado' => $emp->id_empleado 
 		] )->all ();
+		
+		$ultimoPago = WrkPagosEmpleados::find()->where(['id_empleado'=>$emp->id_empleado])->orderBy('fch_pago DESC')->one();
 		
 		return $this->render ( 'empleadoQuincena', [ 
 				'empleado' => $empleado,
 				'deducciones' => $deducciones,
-				'extras' => $extras 
+				'extras' => $extras ,
+				'ultimoPago'=>$ultimoPago
 		] );
+		
 	}
 	public function actionLoginEmpleados() {
 		$session = Yii::$app->session;

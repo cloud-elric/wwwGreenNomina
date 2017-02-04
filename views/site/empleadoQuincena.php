@@ -14,7 +14,9 @@ if($count_tabla >= 1){
 
 ?>
 <h2>Datos empleados</h2>
-<table>
+<table style="
+    width: 100%;
+">
 	<tr>
 		<th>No. empleado</th>
 		<th>Nombre</th>
@@ -34,7 +36,9 @@ if($count_tabla >= 1){
 </table>
 
 <h2>Datos Bancarios</h2>
-<table>
+<table style="
+    width: 100%;
+">
 	<tr>
 		<th>Banco</th>
 		<th>No. cuenta</th>
@@ -52,16 +56,68 @@ if($count_tabla >= 1){
 <?php 
 $totalExtra = 0;
 $totalDeduccion = 0;
+$totalNomina =0;
 ?>
 
 <h2>Pago</h2>
-<table>
+
+<?php if($ultimoPago){
+	$totalNomina = round($ultimoPago->num_total_sueldo_fijo);
+	?>
+	
+	<table style="
+    width: 100%;
+">
+<tr>
+<th>Días trabajados</th>
+<th>Sueldo</th>
+<th>Total</th>
+</tr>
+<tr>
+<td><?=$ultimoPago->num_dias_trabajados?></td>
+<td><?=$ultimoPago->num_sueldo?></td>
+<td><?=round($ultimoPago->num_total_sueldo_fijo)?></td>
+</tr>
+</table>
+	
+	<?php 
+}?>
+
+<h2>Pagos extras</h2>
+<table style="
+    width: 100%;
+">
+<tr>
+<td>Concepto</td>
+<td>Monto</td>
+</tr>
+<?php if(count($extras) >= 1){
+				foreach($extras as $ext){
+			?>
+					<tr>
+						<td><?= $ext->txt_concepto?></td>
+						<td><?= $ext->num_monto?></td>
+					</tr>
+			<?php 
+					$totalExtra += $ext->num_monto;
+				}
+			}else {		
+			?>
+			
+			
+<?php }?>			
+
+</table>
+<h2>Total: <?=$totalExtra+$totalNomina?></h2>
+<!-- <table style="
+    width: 100%;
+">
 	<tr>
 		<th>Percepciones</th>
 		<th>Deducciones</th>
 	</tr>
 	<tr>
-		<table>
+		<table >
 			<tr>
 				<th>Concepto</th>
 				<th>Monto</th>
@@ -136,5 +192,5 @@ $totalDeduccion = 0;
 			</tr>
 		</table>
 	</tr>
-</table>
+</table> -->
 
