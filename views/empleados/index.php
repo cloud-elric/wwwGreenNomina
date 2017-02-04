@@ -5,6 +5,7 @@ use yii\grid\GridView;
 use app\models\CatSucursales;
 use app\models\CatTiposContratos;
 use app\models\CatNominas;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\EntEmpleadosSearch */
@@ -29,7 +30,16 @@ $this->params['breadcrumbs'][] = $this->title;
         //'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-        	'txt_nombre',
+        	[
+        		'attribute' => 'txt_nombre',
+        		'format' => 'raw',
+        		'value' => function($data){
+        			return Html::a($data->txt_nombre,[
+        				'empleados/view',
+        				'id' => $data->id_empleado
+        			]);
+        		}
+        	],
 			[
             	'attribute' => 'id_sucursal',
 				'format' => 'raw',
@@ -62,7 +72,19 @@ $this->params['breadcrumbs'][] = $this->title;
 //             'fch_baja',
             // 'b_habilitado',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+            	'class' => 'yii\grid\ActionColumn',
+            	'template' => '{view} {update} {delete} {pagos}',
+				'buttons' => [
+					'pagos' =>  function ($url, $model) {
+			            		$url = Url::base();
+						return Html::a('<span class="glyphicon glyphicon-pencil"></span>',
+        					$url . '/empleados/pagos-extras'.
+							'?id=' . $model->id_empleado
+            			);
+            		}
+				]
+			], 
         ],
     ]); 
     
