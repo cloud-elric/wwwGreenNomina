@@ -13,11 +13,16 @@ use app\models\EntEmpleadosContactos;
 use app\models\WrkPagosEmpleados;
 use yii\data\ActiveDataProvider;
 use app\models\WrkPagosExtras;
+
 use yii\filters\AccessControl;
+
+use app\models\Utils;
+
 
 /**
  * EmpleadosController implements the CRUD actions for EntEmpleados model.
  */
+
 class EmpleadosController extends Controller {
 	/**
 	 * @inheritdoc
@@ -109,65 +114,61 @@ class EmpleadosController extends Controller {
 	}
 	
 	/**
-	 * Creates a new EntEmpleados model.
-	 * If creation is successful, the browser will be redirected to the 'view' page.
-	 *
-	 * @return mixed
-	 */
-	public function actionCreate() {
-		$model = new EntEmpleados ();
-		$model2 = new EntDatosBancarios ();
-		$model3 = new EntEmpleadosContactos ();
-		
-		if ($model->load ( Yii::$app->request->post () ) && $model->save ()) {
-			$model2->id_empleado = $model->id_empleado;
-			$model3->id_empleado = $model->id_empleado;
-			if ($model2->load ( Yii::$app->request->post () ) && $model2->save ()) {
-				if ($model3->load ( Yii::$app->request->post () ) && $model3->save ()) {
-					return $this->redirect ( [ 
-							'view',
-							'id' => $model->id_empleado 
-					] );
-				}
-			}
-		} else {
-			return $this->render ( 'create', [ 
-					'model' => $model,
-					'model2' => $model2,
-					'model3' => $model3 
-			] );
-		}
-	}
-	
-	/**
-	 * Updates an existing EntEmpleados model.
-	 * If update is successful, the browser will be redirected to the 'view' page.
-	 *
-	 * @param string $id        	
-	 * @return mixed
-	 */
-	public function actionUpdate($id) {
-		$model = $this->findModel ( $id );
-		$model2 = EntDatosBancarios::find ()->where ( [ 
-				'id_empleado' => $id 
-		] )->one ();
-		$model3 = EntEmpleadosContactos::find ()->where ( [ 
-				'id_empleado' => $id 
-		] )->one ();
-		
-		if ($model->load ( Yii::$app->request->post () ) && $model->save ()) {
-			return $this->redirect ( [ 
-					'view',
-					'id' => $model->id_empleado 
-			] );
-		} else {
-			return $this->render ( 'update', [ 
-					'model' => $model,
-					'model2' => $model2,
-					'model3' => $model3 
-			] );
-		}
-	}
+     * Creates a new EntEmpleados model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+    public function actionCreate()
+    {
+        $model = new EntEmpleados();
+        $model2 = new EntDatosBancarios();
+        $model3 = new EntEmpleadosContactos();
+
+        if ($model->load(Yii::$app->request->post())){
+        	$model->fch_alta = Utils::changeFormatDateInput($model->fch_alta);
+        	if($model->save()){
+        		$model2->id_empleado = $model->id_empleado;
+        		$model3->id_empleado = $model->id_empleado;
+        		if($model2->load(Yii::$app->request->post()) && $model2->save()){
+        			if($model3->load(Yii::$app->request->post()) && $model3->save()){
+            			return $this->redirect(['view', 'id' => $model->id_empleado]);
+        			}
+        		}
+        	}
+        }else {
+            return $this->render('create', [
+                'model' => $model,
+            	'model2' => $model2,
+            	'model3' => $model3
+            ]);
+        }
+    }
+
+    /**
+     * Updates an existing EntEmpleados model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param string $id
+     * @return mixed
+     */
+    public function actionUpdate($id)
+    {
+        $model = $this->findModel($id);
+        $model2 = EntDatosBancarios::find()->where(['id_empleado'=>$id])->one();
+        $model3 = EntEmpleadosContactos::find()->where(['id_empleado'=>$id])->one();
+
+        if ($model->load(Yii::$app->request->post())){
+        	$model->fch_alta = Utils::changeFormatDateInput($model->fch_alta);
+        	if($model->save()) {
+            	return $this->redirect(['view', 'id' => $model->id_empleado]);
+        	}
+        } else {
+            return $this->render('update', [
+                'model' => $model,
+           		'model2' => $model2,
+           		'model3' => $model3
+            ]);
+        }
+    }
 	
 	/**
 	 * Deletes an existing EntEmpleados model.

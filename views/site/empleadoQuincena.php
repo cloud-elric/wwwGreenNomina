@@ -1,5 +1,6 @@
 <?php
 use app\models\CatBancos;
+use app\models\Utils;
 
 $count_tabla = count($empleado);
 $usuario = null;
@@ -26,6 +27,9 @@ if($count_tabla >= 1){
 		<th>Email</th>
 	</tr>
 	<tr>
+		<?php 
+		$usuario->fch_alta = Utils::changeFormatDate($usuario->fch_alta);
+		?>
 		<td><?= $usuario->num_empleado ?></td>
 		<td><?= $usuario->txt_nombre ?></td>
 		<td><?= $usuario->txt_rfc ?></td>

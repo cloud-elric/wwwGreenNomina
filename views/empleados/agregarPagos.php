@@ -5,6 +5,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use app\models\WrkPagosEmpleados;
 use yii\helpers\Url;
+use app\models\Utils;
 
 $this->title = 'Pagos extras';
 $this->params['breadcrumbs'][] = ['label' => 'Empleados', 'url' => ['index']];
@@ -15,8 +16,20 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php $form = ActiveForm::begin([]); ?>
     
     <?= $form->field($extras, 'id_empleado')->hiddenInput(['value' => $extras->id_empleado])->label(false)?>
-     
-    <?= $form->field($extras, 'id_nomina')->dropDownList(ArrayHelper::map(WrkPagosEmpleados::find()->where(['id_empleado'=>$extras->id_empleado])->asArray()->all(), 'id_pago_empleado', 'fch_pago'))?>
+    
+    <?php 
+    $fechas = WrkPagosEmpleados::find()->where(['id_empleado'=>$extras->id_empleado])->all();
+    	//var_dump($fechas);exit();
+    	$fch_correcta = array();
+    	foreach($fechas as $fch){
+    		$fch->fch_pago = Utils::changeFormatDate($fch->fch_pago);
+    		$fch_correcta[$fch->id_pago_empleado] = $fch->fch_pago;
+    	}
+    	//var_dump($fch_correcta);exit();
+    ?>
+    <?=  $form->field($extras, 'id_nomina')->dropDownList(ArrayHelper::map($fch_correcta, 'id_pago_empleado', 'fch_pago')) ?>
+    
+    <?php // $form->field($extras, 'id_nomina')->dropDownList(ArrayHelper::map(WrkPagosEmpleados::find()->where(['id_empleado'=>$extras->id_empleado])->asArray()->all(), 'id_pago_empleado', Utils::changeFormatDate('fch_pago')))?>
 	
 	<?= $form->field($extras, 'txt_concepto')->textInput(['maxlength' => true])?>
 	

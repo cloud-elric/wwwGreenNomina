@@ -2,7 +2,9 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use app\models\CatSucursales;
+use app\models\Utils;
 use yii\grid\GridView;
+
 
 /* @var $this yii\web\View */
 /* @var $model app\models\EntEmpleados */
@@ -107,9 +109,11 @@ $this->params ['breadcrumbs'] [] = $this->title;
 							<div class="col-md-6">
 								<strong>Fecha alta:</strong>
 							</div>
+							<?php  $model->fch_alta = Utils::changeFormatDate($model->fch_alta)?>
 							<div class="col-md-6"><?=$model->fch_alta?></div>
 						</div>
 					</div>
+
 
 					<div class="row">
 						<div class="col-md-4">
