@@ -54,15 +54,15 @@ $this->params['breadcrumbs'][] = $this->title;
     		'buttons' => [
     			'view' => function ($url, $model) {
     			$url = Url::base();
-    				return Html::a('View', $url."/empleados/view-pago-extra?id=" . $model->id_pago_extra);
+    				return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url."/empleados/view-pago-extra?id=" . $model->id_pago_extra);
     			},
     			'update' => function ($url, $model) {
     				$url = Url::base();
-    				return Html::a('Update', $url."/empleados/update-pago-extra?id=" . $model->id_pago_extra);
+    				return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url."/empleados/update-pago-extra?id=" . $model->id_pago_extra);
     			},
     			'delete' => function ($url, $model) {
     			$url = Url::base();
-    			return Html::a('Delete', $url."/empleados/delete-pago-extra?id=" . $model->id_pago_extra);
+    			return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url."/empleados/delete-pago-extra?id=" . $model->id_pago_extra);
     			}
     		]
 		]

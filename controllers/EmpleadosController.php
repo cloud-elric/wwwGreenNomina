@@ -57,13 +57,18 @@ class EmpleadosController extends Controller
      */
     public function actionView($id)
     {
-    	$model2 = EntDatosBancarios::find()->where(['id_empleado'=>$id])->one();
-    	$model3 = EntEmpleadosContactos::find()->where(['id_empleado'=>$id])->one();
+    	
+    	$query = WrkPagosEmpleados::find()->where(['id_empleado'=>$id]);
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
     	
         return $this->render('view', [
             'model' => $this->findModel($id),
-        	'model2' => $model2,
-        	'model3' => $model3
+        	'dataProvider'=>$dataProvider
         ]);
     }
 
