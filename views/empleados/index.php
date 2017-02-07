@@ -3,8 +3,6 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use app\models\CatSucursales;
-use app\models\CatTiposContratos;
-use app\models\CatNominas;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
@@ -15,14 +13,16 @@ $this->title = 'Empleados';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="ent-empleados-index">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
+<div class="panel panel-default">
+  <div class="panel-heading"><h1><?= Html::encode($this->title) ?></h1></div>
+  <div class="panel-body">
+  	
+  	<p class="text-right">
         <?= Html::a('Crear Empleado', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-    
+  
+	<?php echo $this->render('_search', ['model' => $searchModel]); ?>
+
     <?php \yii\widgets\Pjax::begin(); ?>
     
     <?= GridView::widget([
@@ -78,7 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				'buttons' => [
 					'pagos' =>  function ($url, $model) {
 			            		$url = Url::base();
-						return Html::a('<span class="glyphicon glyphicon-pencil"></span>',
+						return Html::a('<span class="glyphicon glyphicon glyphicon-usd"></span>',
         					$url . '/empleados/pagos-extras'.
 							'?id=' . $model->id_empleado
             			);
@@ -90,4 +90,8 @@ $this->params['breadcrumbs'][] = $this->title;
     
     \yii\widgets\Pjax::end ();
     ?>
+
+</div>
+</div>
+    
 </div>

@@ -42,7 +42,7 @@ use yii\widgets\ActiveForm;
 		    <?php // echo $form->field($model, 'b_habilitado') ?>
 		</div>
 
-		<div class="col-md-6">
+		<div class="col-md-12 text-center">
 		    <div class="form-group">
 		        <?= Html::submitButton('Buscar', ['class' => 'btn btn-primary']) ?>
 		        <?= Html::resetButton('Resetear', ['class' => 'btn btn-default']) ?>
