@@ -46,6 +46,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'txt_rfc',
             'num_empleado',
             'num_seguro_social',
+        	'txt_usuario',
+        	'txt_password',	
             'fch_alta',
         	[
         		'attribute' => 'banco',
