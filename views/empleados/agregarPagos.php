@@ -1,10 +1,15 @@
 <?php
-use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use app\models\WrkPagosEmpleados;
+use yii\helpers\Url;
+
+$this->title = 'Pagos extras';
+$this->params['breadcrumbs'][] = ['label' => 'Empleados', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Pagos', 'url' => ['pagos-extras?id='.$extras->id_empleado]];
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <?php $form = ActiveForm::begin([]); ?>
@@ -30,7 +35,24 @@ use app\models\WrkPagosEmpleados;
     'columns' => [
     	['class' => 'yii\grid\SerialColumn'],
         'txt_concepto',
-    	'num_monto'
+    	'num_monto',
+    	[
+    		'class' => 'yii\grid\ActionColumn',
+    		'buttons' => [
+    			'view' => function ($url, $model) {
+    			$url = Url::base();
+    				return Html::a('View', $url."/empleados/view-pago-extra?id=" . $model->id_pago_extra);
+    			},
+    			'update' => function ($url, $model) {
+    				$url = Url::base();
+    				return Html::a('Update', $url."/empleados/update-pago-extra?id=" . $model->id_pago_extra);
+    			},
+    			'delete' => function ($url, $model) {
+    			$url = Url::base();
+    			return Html::a('Delete', $url."/empleados/delete-pago-extra?id=" . $model->id_pago_extra);
+    			}
+    		]
+		]
     ]
 ]); 
 

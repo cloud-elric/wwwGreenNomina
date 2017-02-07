@@ -103,12 +103,16 @@ class EmpleadosController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $model2 = EntDatosBancarios::find()->where(['id_empleado'=>$id])->one();
+        $model3 = EntEmpleadosContactos::find()->where(['id_empleado'=>$id])->one();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id_empleado]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+           		'model2' => $model2,
+           		'model3' => $model3
             ]);
         }
     }
@@ -180,5 +184,32 @@ class EmpleadosController extends Controller
     		'extras' => $extras,
     		'dataProvider' => $dataProvider
     	]);
+    }
+    
+    public function actionViewPagoExtra($id){
+    	$extra = WrkPagosExtras::find()->where(['id_pago_extra'=>$id])->one();
+    	
+    	return $this->render('viewPagosExtras',[
+    		'extra' => $extra
+    	]);
+    }
+    
+    public function actionUpdatePagoExtra($id){
+    	$extra = WrkPagosExtras::find()->where(['id_pago_extra'=>$id])->one();
+    	
+    	if ($extra->load(Yii::$app->request->post()) && $extra->save()) {
+    		return $this->redirect(['view-pago-extra', 'id' => $extra->id_pago_extra]);
+    	}
+    	
+    	return $this->render('updatePagosExtras',[
+    		'extra' => $extra
+    	]);
+    }
+    
+    public function actionDeletePagoExtra($id){
+    	$extra = WrkPagosExtras::find()->where(['id_pago_extra'=>$id])->one();
+    	$id = $extra->id_empleado;
+    	$extra->delete();
+    	return $this->redirect(['agregar-pago','id'=>$id ]);
     }
 }
