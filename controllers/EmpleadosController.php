@@ -103,12 +103,16 @@ class EmpleadosController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $model2 = EntDatosBancarios::find()->where(['id_empleado'=>$id])->one();
+        $model3 = EntEmpleadosContactos::find()->where(['id_empleado'=>$id])->one();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id_empleado]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+           		'model2' => $model2,
+           		'model3' => $model3
             ]);
         }
     }
