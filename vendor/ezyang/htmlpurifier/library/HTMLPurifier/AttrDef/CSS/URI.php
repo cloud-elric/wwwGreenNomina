@@ -33,9 +33,12 @@ class HTMLPurifier_AttrDef_CSS_URI extends HTMLPurifier_AttrDef_URI
             return false;
         }
         $uri_string = substr($uri_string, 4);
+<<<<<<< HEAD
+=======
         if (strlen($uri_string) == 0) {
             return false;
         }
+>>>>>>> master
         $new_length = strlen($uri_string) - 1;
         if ($uri_string[$new_length] != ')') {
             return false;

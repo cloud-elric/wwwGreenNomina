@@ -370,6 +370,8 @@ class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
         );
         $this->info['page-break-inside'] = new HTMLPurifier_AttrDef_Enum(array('auto', 'avoid'));
 
+<<<<<<< HEAD
+=======
         $border_radius = new HTMLPurifier_AttrDef_CSS_Composite(
             array(
                 new HTMLPurifier_AttrDef_CSS_Percentage(true), // disallow negative
@@ -383,6 +385,7 @@ class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
         // TODO: support SLASH syntax
         $this->info['border-radius'] = new HTMLPurifier_AttrDef_CSS_Multiple($border_radius, 4);
 
+>>>>>>> master
     }
 
     /**

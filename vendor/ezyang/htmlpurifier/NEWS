@@ -9,6 +9,8 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
     . Internal change
 ==========================
 
+<<<<<<< HEAD
+=======
 4.8.0, released 2016-07-16
 # By default, when a link has a target attribute associated
   with it, we now also add rel="noreferrer" in order to
@@ -40,6 +42,7 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 - AutoFormat.RemoveEmpty.Predicate now correctly renders in
   web form. (#85)
 
+>>>>>>> master
 4.7.0, released 2015-08-04
 # opacity is now considered a "tricky" CSS property rather than a
   proprietary one.
