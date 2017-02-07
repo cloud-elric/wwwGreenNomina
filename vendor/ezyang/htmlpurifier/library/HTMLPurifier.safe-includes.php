@@ -131,6 +131,10 @@ require_once $__dir . '/HTMLPurifier/AttrTransform/SafeObject.php';
 require_once $__dir . '/HTMLPurifier/AttrTransform/SafeParam.php';
 require_once $__dir . '/HTMLPurifier/AttrTransform/ScriptRequired.php';
 require_once $__dir . '/HTMLPurifier/AttrTransform/TargetBlank.php';
+<<<<<<< HEAD
+=======
+require_once $__dir . '/HTMLPurifier/AttrTransform/TargetNoreferrer.php';
+>>>>>>> master
 require_once $__dir . '/HTMLPurifier/AttrTransform/Textarea.php';
 require_once $__dir . '/HTMLPurifier/ChildDef/Chameleon.php';
 require_once $__dir . '/HTMLPurifier/ChildDef/Custom.php';
@@ -169,6 +173,10 @@ require_once $__dir . '/HTMLPurifier/HTMLModule/StyleAttribute.php';
 require_once $__dir . '/HTMLPurifier/HTMLModule/Tables.php';
 require_once $__dir . '/HTMLPurifier/HTMLModule/Target.php';
 require_once $__dir . '/HTMLPurifier/HTMLModule/TargetBlank.php';
+<<<<<<< HEAD
+=======
+require_once $__dir . '/HTMLPurifier/HTMLModule/TargetNoreferrer.php';
+>>>>>>> master
 require_once $__dir . '/HTMLPurifier/HTMLModule/Text.php';
 require_once $__dir . '/HTMLPurifier/HTMLModule/Tidy.php';
 require_once $__dir . '/HTMLPurifier/HTMLModule/XMLCommonAttributes.php';
@@ -219,5 +227,9 @@ require_once $__dir . '/HTMLPurifier/URIScheme/https.php';
 require_once $__dir . '/HTMLPurifier/URIScheme/mailto.php';
 require_once $__dir . '/HTMLPurifier/URIScheme/news.php';
 require_once $__dir . '/HTMLPurifier/URIScheme/nntp.php';
+<<<<<<< HEAD
+=======
+require_once $__dir . '/HTMLPurifier/URIScheme/tel.php';
+>>>>>>> master
 require_once $__dir . '/HTMLPurifier/VarParser/Flexible.php';
 require_once $__dir . '/HTMLPurifier/VarParser/Native.php';

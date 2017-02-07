@@ -32,8 +32,12 @@ class HTMLPurifier_AttrTransform_ImgRequired extends HTMLPurifier_AttrTransform
             if ($src) {
                 $alt = $config->get('Attr.DefaultImageAlt');
                 if ($alt === null) {
+<<<<<<< HEAD
                     // truncate if the alt is too long
                     $attr['alt'] = substr(basename($attr['src']), 0, 40);
+=======
+                    $attr['alt'] = basename($attr['src']);
+>>>>>>> master
                 } else {
                     $attr['alt'] = $alt;
                 }

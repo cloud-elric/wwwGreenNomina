@@ -8,6 +8,10 @@ array (
   'ftp' => true,
   'nntp' => true,
   'news' => true,
+<<<<<<< HEAD
+=======
+  'tel' => true,
+>>>>>>> master
 )
 --DESCRIPTION--
 Whitelist that defines the schemes that a URI is allowed to have.  This

@@ -25,6 +25,10 @@ class HTMLPurifier_AttrDef_CSS extends HTMLPurifier_AttrDef
         $css = $this->parseCDATA($css);
 
         $definition = $config->getCSSDefinition();
+<<<<<<< HEAD
+=======
+        $allow_duplicates = $config->get("CSS.AllowDuplicates");
+>>>>>>> master
 
         // we're going to break the spec and explode by semicolons.
         // This is because semicolon rarely appears in escaped form
@@ -34,6 +38,10 @@ class HTMLPurifier_AttrDef_CSS extends HTMLPurifier_AttrDef
 
         $declarations = explode(';', $css);
         $propvalues = array();
+<<<<<<< HEAD
+=======
+        $new_declarations = '';
+>>>>>>> master
 
         /**
          * Name of the current CSS property being validated.
@@ -83,7 +91,15 @@ class HTMLPurifier_AttrDef_CSS extends HTMLPurifier_AttrDef
             if ($result === false) {
                 continue;
             }
+<<<<<<< HEAD
             $propvalues[$property] = $result;
+=======
+            if ($allow_duplicates) {
+                $new_declarations .= "$property:$result;";
+            } else {
+                $propvalues[$property] = $result;
+            }
+>>>>>>> master
         }
 
         $context->destroy('CurrentCSSProperty');
@@ -92,7 +108,10 @@ class HTMLPurifier_AttrDef_CSS extends HTMLPurifier_AttrDef
         // slightly inefficient, but it's the only way of getting rid of
         // duplicates. Perhaps config to optimize it, but not now.
 
+<<<<<<< HEAD
         $new_declarations = '';
+=======
+>>>>>>> master
         foreach ($propvalues as $prop => $value) {
             $new_declarations .= "$prop:$value;";
         }

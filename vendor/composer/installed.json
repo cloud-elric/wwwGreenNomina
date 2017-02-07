@@ -314,6 +314,7 @@
     },
     {
         "name": "ezyang/htmlpurifier",
+
         "version": "v4.7.0",
         "version_normalized": "4.7.0.0",
         "source": {
@@ -325,12 +326,15 @@
             "type": "zip",
             "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/ae1828d955112356f7677c465f94f7deb7d27a40",
             "reference": "ae1828d955112356f7677c465f94f7deb7d27a40",
+
             "shasum": ""
         },
         "require": {
             "php": ">=5.2"
         },
+
         "time": "2015-08-05 01:03:42",
+
         "type": "library",
         "installation-source": "dist",
         "autoload": {
