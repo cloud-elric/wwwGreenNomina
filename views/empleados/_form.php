@@ -8,6 +8,7 @@ use app\models\CatTiposContratos;
 use app\models\CatNominas;
 use yii\web\View;
 use app\models\CatBancos;
+use app\models\Utils;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\EntEmpleados */
@@ -33,7 +34,10 @@ use app\models\CatBancos;
     <?= $form->field($model, 'num_empleado')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'num_seguro_social')->textInput(['maxlength' => true]) ?>
-
+    
+	<?php if($model->fch_alta){
+		$model->fch_alta = Utils::changeFormatDate($model->fch_alta); 
+	}?>
     <?= $form->field($model, 'fch_alta')->textInput() ?>
 
     <?= $form->field($model2, 'id_banco')->dropDownList(ArrayHelper::map(CatBancos::find()->asArray()->all(), 'id_banco', 'txt_nombre'), ['prompt' => 'Seleccionar banco']) ?>

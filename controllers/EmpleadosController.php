@@ -13,6 +13,7 @@ use app\models\EntEmpleadosContactos;
 use app\models\WrkPagosEmpleados;
 use yii\data\ActiveDataProvider;
 use app\models\WrkPagosExtras;
+use app\models\Utils;
 
 /**
  * EmpleadosController implements the CRUD actions for EntEmpleados model.
@@ -77,12 +78,15 @@ class EmpleadosController extends Controller
         $model2 = new EntDatosBancarios();
         $model3 = new EntEmpleadosContactos();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-        	$model2->id_empleado = $model->id_empleado;
-        	$model3->id_empleado = $model->id_empleado;
-        	if($model2->load(Yii::$app->request->post()) && $model2->save()){
-        		if($model3->load(Yii::$app->request->post()) && $model3->save()){
-            		return $this->redirect(['view', 'id' => $model->id_empleado]);
+        if ($model->load(Yii::$app->request->post())){
+        	$model->fch_alta = Utils::changeFormatDateInput($model->fch_alta);
+        	if($model->save()){
+        		$model2->id_empleado = $model->id_empleado;
+        		$model3->id_empleado = $model->id_empleado;
+        		if($model2->load(Yii::$app->request->post()) && $model2->save()){
+        			if($model3->load(Yii::$app->request->post()) && $model3->save()){
+            			return $this->redirect(['view', 'id' => $model->id_empleado]);
+        			}
         		}
         	}
         }else {
@@ -106,8 +110,11 @@ class EmpleadosController extends Controller
         $model2 = EntDatosBancarios::find()->where(['id_empleado'=>$id])->one();
         $model3 = EntEmpleadosContactos::find()->where(['id_empleado'=>$id])->one();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id_empleado]);
+        if ($model->load(Yii::$app->request->post())){
+        	$model->fch_alta = Utils::changeFormatDateInput($model->fch_alta);
+        	if($model->save()) {
+            	return $this->redirect(['view', 'id' => $model->id_empleado]);
+        	}
         } else {
             return $this->render('update', [
                 'model' => $model,

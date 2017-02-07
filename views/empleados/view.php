@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use app\models\CatSucursales;
+use app\models\Utils;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\EntEmpleados */
@@ -46,7 +47,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'txt_rfc',
             'num_empleado',
             'num_seguro_social',
-            'fch_alta',
+        	[
+        		'attribute' => 'fch_alta',
+        		'value' => $model->fch_alta = Utils::changeFormatDate($model->fch_alta)
+            ],
         	[
         		'attribute' => 'banco',
         		'value' => $model->entDatosBancarios->idBanco->txt_nombre
