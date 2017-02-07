@@ -224,6 +224,7 @@ class EmpleadosController extends Controller {
 		] );
 	}
 	public function actionAgregarPago($id) {
+		$empleadoV = EntEmpleados::find()->where(['id_empleado'=>$id])->one();
 		$extras = new WrkPagosExtras ();
 		$extras->id_empleado = $id;
 		
@@ -251,7 +252,8 @@ class EmpleadosController extends Controller {
 			] );
 		}
 		
-		return $this->render ( 'agregarPagos', [ 
+		return $this->render ( 'agregarPagos', [
+				'empleadoV'=>$empleadoV,
 				'extras' => $extras,
 				'dataProvider' => $dataProvider 
 		] );

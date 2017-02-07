@@ -6,6 +6,9 @@ use yii\grid\GridView;
 use app\models\WrkPagosEmpleados;
 use yii\helpers\Url;
 use app\models\Utils;
+use app\models\ViewEmpleadoCompleto;
+use app\models\WrkDeduccionesEmpleado;
+use app\models\WrkPagosExtras;
 
 $this->title = 'Pagos extras';
 $this->params['breadcrumbs'][] = ['label' => 'Empleados', 'url' => ['index']];
@@ -73,4 +76,22 @@ $this->params['breadcrumbs'][] = $this->title;
 ]); 
 
 \yii\widgets\Pjax::end ();
+$empleado = ViewEmpleadoCompleto::find ()->where ( [
+		'id_empleado' => $empleadoV->id_empleado,
+] )->all ();
+$deducciones = WrkDeduccionesEmpleado::find ()->where ( [
+		'id_empleado' => $empleadoV->id_empleado
+] )->all ();
+$extras = WrkPagosExtras::find ()->where ( [
+		'id_empleado' => $empleadoV->id_empleado
+] )->all ();
+
+$ultimoPago = WrkPagosEmpleados::find()->where(['id_empleado'=>$empleadoV->id_empleado])->orderBy('fch_pago DESC')->one();
+
+echo $this->render ( '//site/empleadoQuincena', [ 
+				'empleado' => $empleado,
+				'deducciones' => $deducciones,
+				'extras' => $extras ,
+				'ultimoPago'=>$ultimoPago
+		] );
 ?>
