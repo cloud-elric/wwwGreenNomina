@@ -8,6 +8,11 @@ $config = [
 				'log' 
 		],
 		'language' => 'es',
+		'modules' => [
+				'modUsuarios' => [
+						'class' => 'app\modules\ModUsuarios\ModUsuarios'
+				],
+		],
 		'components' => [ 
 				'session' => [ 
 						'timeout' => 3600 

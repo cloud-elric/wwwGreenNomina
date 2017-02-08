@@ -18,7 +18,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $form->field($extras, 'id_empleado')->hiddenInput(['value' => $extras->id_empleado])->label(false)?>
     
     <?php
-    $arreglo = ArrayHelper::map(WrkPagosEmpleados::find()->where(['id_empleado'=>$extras->id_empleado])->asArray()->all(),'id_pago_empleado', 'fch_pago');
     $fechas = WrkPagosEmpleados::find()->where(['id_empleado'=>$extras->id_empleado])->all();
     	//var_dump($fechas);exit();
     	$fch_correcta = array();
@@ -26,18 +25,16 @@ $this->params['breadcrumbs'][] = $this->title;
     		$fch->fch_pago = Utils::changeFormatDate($fch->fch_pago);
     		//$fch_correcta[$fch->id_pago_empleado] = $fch->fch_pago;
     		
-    		$fch_correcta = [
+    		$fch_correcta[] = [
     			['id_pago_empleado' => $fch->id_pago_empleado, 'fch_pago' => $fch->fch_pago]
     		];
     	}
-//     	var_dump($fch_correcta);//exit();
+//     	var_dump($fch_correcta);
 //     	var_dump($arreglo);exit();
     ?>
     <?=  $form->field($extras, 'id_nomina')->dropDownList(ArrayHelper::map($fch_correcta, 'id_pago_empleado', 'fch_pago')) ?>
     
-    <?php // $form->field($extras, 'id_nomina')->dropDownList(ArrayHelper::map(WrkPagosEmpleados::find()->where(['id_empleado'=>$extras->id_empleado])->asArray()->all(), 'id_pago_empleado', Utils::changeFormatDate('fch_pago')))?>
-	
-	<?= $form->field($extras, 'txt_concepto')->textInput(['maxlength' => true])?>
+    <?= $form->field($extras, 'txt_concepto')->textInput(['maxlength' => true])?>
 	
 	<?= $form->field($extras, 'num_monto')->textInput(['maxlength' => true])?>
 	

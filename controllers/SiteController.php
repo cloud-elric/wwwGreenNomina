@@ -32,12 +32,12 @@ class SiteController extends Controller {
 				'access' => [ 
 						'class' => AccessControl::className (),
 						'only' => [ 
-								'logout' 
+								'logout', 'index','empleado-quincena', 'subir-archivo', 'upload-file' 
 						],
 						'rules' => [ 
 								[ 
 										'actions' => [ 
-												'logout' 
+												'logout','index','empleado-quincena', 'subir-archivo', 'upload-file' 
 										],
 										'allow' => true,
 										'roles' => [ 
