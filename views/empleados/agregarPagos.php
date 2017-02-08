@@ -21,13 +21,14 @@ $this->params['breadcrumbs'][] = $this->title;
     $fechas = WrkPagosEmpleados::find()->where(['id_empleado'=>$extras->id_empleado])->all();
     	//var_dump($fechas);exit();
     	$fch_correcta = array();
+    	$i=0;
     	foreach($fechas as $fch){
     		$fch->fch_pago = Utils::changeFormatDate($fch->fch_pago);
     		//$fch_correcta[$fch->id_pago_empleado] = $fch->fch_pago;
     		
-    		$fch_correcta[] = [
-    			['id_pago_empleado' => $fch->id_pago_empleado, 'fch_pago' => $fch->fch_pago]
-    		];
+    		$fch_correcta[$i] = 
+    			['id_pago_empleado' => $fch->id_pago_empleado, 'fch_pago' => $fch->fch_pago];
+    		$i++;
     	}
 //     	var_dump($fch_correcta);
 //     	var_dump($arreglo);exit();
