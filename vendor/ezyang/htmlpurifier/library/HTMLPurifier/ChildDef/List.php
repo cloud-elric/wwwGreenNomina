@@ -38,15 +38,12 @@ class HTMLPurifier_ChildDef_List extends HTMLPurifier_ChildDef
             return false;
         }
 
-<<<<<<< HEAD
-=======
         // if li is not allowed, delete parent node
         if (!isset($config->getHTMLDefinition()->info['li'])) {
             trigger_error("Cannot allow ul/ol without allowing li", E_USER_WARNING);
             return false;
         }
 
->>>>>>> master
         // the new set of children
         $result = array();
 

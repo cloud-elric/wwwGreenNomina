@@ -79,11 +79,6 @@ class HTMLPurifier_URIScheme_data extends HTMLPurifier_URIScheme
         } else {
             $raw_data = $data;
         }
-<<<<<<< HEAD
-        // XXX probably want to refactor this into a general mechanism
-        // for filtering arbitrary content types
-        $file = tempnam("/tmp", "");
-=======
         if ( strlen($raw_data) < 12 ) {
             // error; exif_imagetype throws exception with small files,
             // and this likely indicates a corrupt URI/failed parse anyway
@@ -96,7 +91,6 @@ class HTMLPurifier_URIScheme_data extends HTMLPurifier_URIScheme
         } else {
             $file = tempnam("/tmp", "");
         }
->>>>>>> master
         file_put_contents($file, $raw_data);
         if (function_exists('exif_imagetype')) {
             $image_code = exif_imagetype($file);

@@ -76,31 +76,13 @@ class HTMLPurifier_AttrDef_URI_Host extends HTMLPurifier_AttrDef
         // fairly well supported.
         $underscore = $config->get('Core.AllowHostnameUnderscore') ? '_' : '';
 
-<<<<<<< HEAD
-=======
         // Based off of RFC 1738, but amended so that
         // as per RFC 3696, the top label need only not be all numeric.
->>>>>>> master
         // The productions describing this are:
         $a   = '[a-z]';     // alpha
         $an  = '[a-z0-9]';  // alphanum
         $and = "[a-z0-9-$underscore]"; // alphanum | "-"
         // domainlabel = alphanum | alphanum *( alphanum | "-" ) alphanum
-<<<<<<< HEAD
-        $domainlabel = "$an($and*$an)?";
-        // toplabel    = alpha | alpha *( alphanum | "-" ) alphanum
-        $toplabel = "$a($and*$an)?";
-        // hostname    = *( domainlabel "." ) toplabel [ "." ]
-        if (preg_match("/^($domainlabel\.)*$toplabel\.?$/i", $string)) {
-            return $string;
-        }
-
-        // If we have Net_IDNA2 support, we can support IRIs by
-        // punycoding them. (This is the most portable thing to do,
-        // since otherwise we have to assume browsers support
-
-        if ($config->get('Core.EnableIDNA')) {
-=======
         $domainlabel = "$an(?:$and*$an)?";
         // AMENDED as per RFC 3696
         // toplabel    = alphanum | alphanum *( alphanum | "-" ) alphanum
@@ -121,7 +103,6 @@ class HTMLPurifier_AttrDef_URI_Host extends HTMLPurifier_AttrDef
         // punycoding them. (This is the most portable thing to do,
         // since otherwise we have to assume browsers support
         } elseif ($config->get('Core.EnableIDNA')) {
->>>>>>> master
             $idna = new Net_IDNA2(array('encoding' => 'utf8', 'overlong' => false, 'strict' => true));
             // we need to encode each period separately
             $parts = explode('.', $string);

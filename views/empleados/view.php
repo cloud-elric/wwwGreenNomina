@@ -158,7 +158,7 @@ $this->params ['breadcrumbs'] [] = $this->title;
         	'attribute' => 'fch_pago',
         	'format' => 'raw',
         	'value' => function($data){
-        		return Html::a($data->fch_pago,[
+        		return Html::a(Utils::changeFormatDate($data->fch_pago),[
         			'empleados/agregar-pago',
         			'id' => $data->id_empleado
         		]);

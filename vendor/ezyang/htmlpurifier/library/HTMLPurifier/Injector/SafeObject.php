@@ -36,10 +36,7 @@ class HTMLPurifier_Injector_SafeObject extends HTMLPurifier_Injector
     );
 
     /**
-<<<<<<< HEAD
-=======
      * These are all lower-case keys.
->>>>>>> master
      * @type array
      */
     protected $allowedParam = array(
@@ -47,11 +44,7 @@ class HTMLPurifier_Injector_SafeObject extends HTMLPurifier_Injector
         'movie' => true,
         'flashvars' => true,
         'src' => true,
-<<<<<<< HEAD
-        'allowFullScreen' => true, // if omitted, assume to be 'false'
-=======
         'allowfullscreen' => true, // if omitted, assume to be 'false'
->>>>>>> master
     );
 
     /**
@@ -101,17 +94,11 @@ class HTMLPurifier_Injector_SafeObject extends HTMLPurifier_Injector
                     $token->attr['name'] === $this->addParam[$n]) {
                     // keep token, and add to param stack
                     $this->paramStack[$i][$n] = true;
-<<<<<<< HEAD
-                } elseif (isset($this->allowedParam[$n])) {
-                    // keep token, don't do anything to it
-                    // (could possibly check for duplicates here)
-=======
                 } elseif (isset($this->allowedParam[strtolower($n)])) {
                     // keep token, don't do anything to it
                     // (could possibly check for duplicates here)
                     // Note: In principle, parameters should be case sensitive.
                     // But it seems they are not really; so accept any case.
->>>>>>> master
                 } else {
                     $token = false;
                 }
