@@ -6,9 +6,6 @@ use yii\grid\GridView;
 use app\models\WrkPagosEmpleados;
 use yii\helpers\Url;
 use app\models\Utils;
-use app\models\ViewEmpleadoCompleto;
-use app\models\WrkDeduccionesEmpleado;
-use app\models\WrkPagosExtras;
 
 $this->title = 'Pagos extras';
 $this->params['breadcrumbs'][] = ['label' => 'Empleados', 'url' => ['index']];
@@ -20,24 +17,25 @@ $this->params['breadcrumbs'][] = $this->title;
     
     <?= $form->field($extras, 'id_empleado')->hiddenInput(['value' => $extras->id_empleado])->label(false)?>
     
-    <?php 
+    <?php
     $fechas = WrkPagosEmpleados::find()->where(['id_empleado'=>$extras->id_empleado])->all();
     	//var_dump($fechas);exit();
     	$fch_correcta = array();
-    	$i = 0;
+    	$i=0;
     	foreach($fechas as $fch){
     		$fch->fch_pago = Utils::changeFormatDate($fch->fch_pago);
-    		$fch_correcta[$i]['id_pago_empleado'] = $fch->id_pago_empleado;
-    		$fch_correcta[$i]['fch_pago'] = $fch->fch_pago; 
+    		//$fch_correcta[$fch->id_pago_empleado] = $fch->fch_pago;
+    		
+    		$fch_correcta[$i] = 
+    			['id_pago_empleado' => $fch->id_pago_empleado, 'fch_pago' => $fch->fch_pago];
     		$i++;
     	}
-    	//var_dump($fch_correcta);exit();
+//     	var_dump($fch_correcta);
+//     	var_dump($arreglo);exit();
     ?>
     <?=  $form->field($extras, 'id_nomina')->dropDownList(ArrayHelper::map($fch_correcta, 'id_pago_empleado', 'fch_pago')) ?>
     
-    <?php // $form->field($extras, 'id_nomina')->dropDownList(ArrayHelper::map(WrkPagosEmpleados::find()->where(['id_empleado'=>$extras->id_empleado])->asArray()->all(), 'id_pago_empleado', Utils::changeFormatDate('fch_pago')))?>
-	
-	<?= $form->field($extras, 'txt_concepto')->textInput(['maxlength' => true])?>
+    <?= $form->field($extras, 'txt_concepto')->textInput(['maxlength' => true])?>
 	
 	<?= $form->field($extras, 'num_monto')->textInput(['maxlength' => true])?>
 	
@@ -76,22 +74,4 @@ $this->params['breadcrumbs'][] = $this->title;
 ]); 
 
 \yii\widgets\Pjax::end ();
-$empleado = ViewEmpleadoCompleto::find ()->where ( [
-		'id_empleado' => $empleadoV->id_empleado,
-] )->all ();
-$deducciones = WrkDeduccionesEmpleado::find ()->where ( [
-		'id_empleado' => $empleadoV->id_empleado
-] )->all ();
-$extras = WrkPagosExtras::find ()->where ( [
-		'id_empleado' => $empleadoV->id_empleado
-] )->all ();
-
-$ultimoPago = WrkPagosEmpleados::find()->where(['id_empleado'=>$empleadoV->id_empleado])->orderBy('fch_pago DESC')->one();
-
-echo $this->render ( '//site/empleadoQuincena', [ 
-				'empleado' => $empleado,
-				'deducciones' => $deducciones,
-				'extras' => $extras ,
-				'ultimoPago'=>$ultimoPago
-		] );
 ?>
