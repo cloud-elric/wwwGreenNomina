@@ -19,21 +19,25 @@ $this->title = 'Nomina';
 			</div>
 		</a>
 	</div>
-	<div class="col-md-4">
-		<a href="<?=Yii::$app->urlManager->createAbsoluteUrl ( ['site/subir-archivo'] );?>">
-			<div class="widget widget-shadow" id="widgetLineareaOne">
-				<div class="widget-content">
-					<div class="padding-20 padding-top-10">
-						<div class="clearfix">
-							<div class="grey-800 pull-left padding-vertical-10">
-								<i class="glyphicon glyphicon-open"></i> Subir información desde Excel
+	
+	<?php if(Yii::$app->user->identity->id_tipo_usuario == 3){?>
+		<div class="col-md-4">
+			<a href="<?=Yii::$app->urlManager->createAbsoluteUrl ( ['site/subir-archivo'] );?>">
+				<div class="widget widget-shadow" id="widgetLineareaOne">
+					<div class="widget-content">
+						<div class="padding-20 padding-top-10">
+							<div class="clearfix">
+								<div class="grey-800 pull-left padding-vertical-10">
+									<i class="glyphicon glyphicon-open"></i> Subir información desde Excel
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</a>
-	</div>
+			</a>
+		</div>
+	<?php }?>	
+		
 	<div class="col-md-4">
 		<a href="<?=Yii::$app->urlManager->createAbsoluteUrl ( ['empleados/pagos'] );?>">
 			<div class="widget widget-shadow" id="widgetLineareaOne">

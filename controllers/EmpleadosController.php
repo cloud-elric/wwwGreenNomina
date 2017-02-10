@@ -82,6 +82,7 @@ class EmpleadosController extends Controller {
 	public function actionIndex() {
 		$searchModel = new EntEmpleadosSearch ();
 		$dataProvider = $searchModel->search ( Yii::$app->request->queryParams );
+		//echo Yii::$app->user->identity->id_usuario; exit();
 		
 		return $this->render ( 'index', [ 
 				'searchModel' => $searchModel,
