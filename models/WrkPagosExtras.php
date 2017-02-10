@@ -12,6 +12,7 @@ use Yii;
  * @property string $id_nomina
  * @property string $txt_concepto
  * @property integer $num_monto
+ * @property integer $b_deposito
  *
  * @property WrkPagosEmpleados $idNomina
  * @property EntEmpleados $idEmpleado
@@ -33,7 +34,7 @@ class WrkPagosExtras extends \yii\db\ActiveRecord
     {
         return [
             [['id_empleado', 'id_nomina', 'txt_concepto', 'num_monto'], 'required'],
-            [['id_empleado', 'id_nomina', 'num_monto'], 'integer'],
+            [['id_empleado', 'id_nomina', 'num_monto', 'b_deposito'], 'integer'],
             [['txt_concepto'], 'string', 'max' => 200],
             [['id_nomina'], 'exist', 'skipOnError' => true, 'targetClass' => WrkPagosEmpleados::className(), 'targetAttribute' => ['id_nomina' => 'id_pago_empleado']],
             [['id_empleado'], 'exist', 'skipOnError' => true, 'targetClass' => EntEmpleados::className(), 'targetAttribute' => ['id_empleado' => 'id_empleado']],
@@ -51,6 +52,7 @@ class WrkPagosExtras extends \yii\db\ActiveRecord
             'id_nomina' => 'Nomina',
             'txt_concepto' => 'Concepto',
             'num_monto' => 'Monto',
+            'b_deposito' => 'B Deposito',
         ];
     }
 
