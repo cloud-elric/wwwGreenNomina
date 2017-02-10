@@ -8,7 +8,7 @@ use app\models\CatSucursales;
 /* @var $model app\models\EntEmpleados */
 
 $this->title = $extra->txt_concepto;
-$this->params['breadcrumbs'][] = ['label' => 'Pagos extras', 'url' => ['agregar-pago?id='.$extra->id_empleado]];
+$this->params['breadcrumbs'][] = ['label' => 'Pagos extras', 'url' => ['agregar-pago?id='.$extra->id_empleado.'&idPago='.$extra->id_nomina]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="ent-empleados-view">
