@@ -82,6 +82,7 @@ class EmpleadosController extends Controller {
 	public function actionIndex() {
 		$searchModel = new EntEmpleadosSearch ();
 		$dataProvider = $searchModel->search ( Yii::$app->request->queryParams );
+		//echo Yii::$app->user->identity->id_usuario; exit();
 		
 		return $this->render ( 'index', [ 
 				'searchModel' => $searchModel,
@@ -223,40 +224,44 @@ class EmpleadosController extends Controller {
 				'dataProvider' => $dataProvider 
 		] );
 	}
-	public function actionAgregarPago($id) {
+	public function actionAgregarPago($id, $idPago) {
 		$empleadoV = EntEmpleados::find()->where(['id_empleado'=>$id])->one();
 		$extras = new WrkPagosExtras ();
 		$extras->id_empleado = $id;
+		$extras->id_nomina = $idPago;
 		
-		$pagos = WrkPagosExtras::find ()->where ( [ 
-				'id_empleado' => $id 
-		] );
+		$pagos = WrkPagosExtras::find ()->where(['id_empleado' => $id])->andWhere(['id_nomina'=>$idPago])->andWhere(['b_deposito'=>1]);
 		$dataProvider = new ActiveDataProvider ( [ 
-				'query' => $pagos 
+			'query' => $pagos 
 		] );
 		
-		if ($extras->load ( Yii::$app->request->post () ) && $extras->save ()) {
-			$extras2 = new WrkPagosExtras ();
-			$extras2->id_empleado = $id;
+		if ($extras->load ( Yii::$app->request->post())){
+			$extras->b_deposito = 1;
+			if($extras->save ()){
 			
-			$pagos2 = WrkPagosExtras::find ()->where ( [ 
-					'id_empleado' => $id 
-			] );
-			$dataProvider = new ActiveDataProvider ( [ 
-					'query' => $pagos2 
-			] );
-			
-			return $this->redirect ( [ 
+// 				$extras2 = new WrkPagosExtras ();
+// 				$extras2->id_empleado = $id;
+				
+// 				$pagos2 = WrkPagosExtras::find ()->where ( [ 
+// 						'id_empleado' => $id 
+// 				] );
+// 				$dataProvider = new ActiveDataProvider ( [ 
+// 						'query' => $pagos2 
+// 				] );
+				
+				return $this->redirect([ 
 					'agregar-pago',
-					'id' => $id 
-			] );
+					'id' => $id,
+					'idPago' => $idPago
+				]);
+			}
 		}
 		
-		return $this->render ( 'agregarPagos', [
+		return $this->render('agregarPagos', [
 				'empleadoV'=>$empleadoV,
 				'extras' => $extras,
 				'dataProvider' => $dataProvider 
-		] );
+		]);
 	}
 	public function actionViewPagoExtra($id) {
 		$extra = WrkPagosExtras::find ()->where ( [ 

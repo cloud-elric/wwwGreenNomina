@@ -20,10 +20,13 @@ $this->params ['breadcrumbs'] [] = $this->title;
 ?>
 <div class="ent-empleados-view">
 
-	<p class="text-right">
-        <?= Html::a('Actualizar', ['update', 'id' => $model->id_empleado], ['class' => 'btn btn-primary'])?>
-        <?=Html::a ( 'Dar de baja', [ 'delete','id' => $model->id_empleado ], [ 'class' => 'btn btn-danger','data' => [ 'confirm' => 'Estas seguro de que quieres eleminar este elemento?','method' => 'post' ] ] )?>
-    </p>
+	<?php if(Yii::$app->user->identity->id_tipo_usuario == 3){?>
+		<p class="text-right">
+	        <?= Html::a('Actualizar', ['update', 'id' => $model->id_empleado], ['class' => 'btn btn-primary'])?>
+	        <?=Html::a ( 'Dar de baja', [ 'delete','id' => $model->id_empleado ], [ 'class' => 'btn btn-danger','data' => [ 'confirm' => 'Estas seguro de que quieres eleminar este elemento?','method' => 'post' ] ] )?>
+	    </p>
+	<?php }?>    
+	    
 	<div class="row">
 		<div class="col-md-12">
 
@@ -158,9 +161,10 @@ $this->params ['breadcrumbs'] [] = $this->title;
         	'attribute' => 'fch_pago',
         	'format' => 'raw',
         	'value' => function($data){
-        		return Html::a($data->fch_pago,[
+        		return Html::a(Utils::changeFormatDate($data->fch_pago),[
         			'empleados/agregar-pago',
-        			'id' => $data->id_empleado
+        			'id' => $data->id_empleado,
+        			'idPago' => $data->id_pago_empleado
         		]);
         	}
         ],
