@@ -1,10 +1,11 @@
 
-
+var l = Ladda.create(document.getElementById("js-upload-button-ladda"));
 
 $(document).ready(function() {
 
 	$('.js-subir-registros').on('click', function(e) {
 		e.preventDefault();
+	 	l.start();
 		
 		// la variable droppedFiles se encuentra en el archivo drag.js
 		if(droppedFiles || $('#js-file-excel').val()){
@@ -13,6 +14,7 @@ $(document).ready(function() {
 			 swal("Espera",
 						"Debes subir un archivo.",
 						"warning");
+			 l.stop();
 		}
 		
 	});
@@ -20,6 +22,7 @@ $(document).ready(function() {
 });
 
 function uploadFile(){
+	
 	var form = document.getElementById('js-form-upload-excel');
 	 var data = new FormData(form);
 
@@ -29,9 +32,6 @@ function uploadFile(){
 		{
 			ajaxData.append('fileUpload', droppedFiles.files[0]);
 		}
-
-	 
-     
 	
 	$.ajax({
 		url: basePath+'site/upload-file',
@@ -84,6 +84,8 @@ function uploadFile(){
         },
 		success:function(resp){
 			$('.js-data-excel').html(resp);
+			l.stop();
+			
 		}
 	})
 }

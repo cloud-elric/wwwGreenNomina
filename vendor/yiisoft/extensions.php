@@ -57,10 +57,6 @@ return array (
       '@yii/faker' => $vendorDir . '/yiisoft/yii2-faker',
     ),
   ),
-<<<<<<< HEAD
-
-=======
->>>>>>> a4c11f3dc40228ff14ff06a74b5076e364249a86
 		'kartik-v/yii2-krajee-base' =>
 		array (
 				'name' => 'kartik-v/yii2-krajee-base',
@@ -88,8 +84,4 @@ return array (
 						'@kartik/password' => $vendorDir . '/kartik-v/yii2-password',
 				),
 		),
-<<<<<<< HEAD
-
-=======
->>>>>>> a4c11f3dc40228ff14ff06a74b5076e364249a86
 );
