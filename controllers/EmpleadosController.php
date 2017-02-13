@@ -230,7 +230,7 @@ class EmpleadosController extends Controller {
 		$extras->id_empleado = $id;
 		$extras->id_nomina = $idPago;
 		
-		$pagos = WrkPagosExtras::find ()->where(['id_empleado' => $id])->andWhere(['id_nomina'=>$idPago]);
+		$pagos = WrkPagosExtras::find ()->where(['id_empleado' => $id])->andWhere(['id_nomina'=>$idPago])->andWhere(['b_deposito'=>1]);
 		$dataProvider = new ActiveDataProvider ( [ 
 			'query' => $pagos 
 		] );
