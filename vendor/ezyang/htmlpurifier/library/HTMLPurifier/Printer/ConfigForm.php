@@ -327,13 +327,10 @@ class HTMLPurifier_Printer_ConfigForm_default extends HTMLPurifier_Printer
                 case HTMLPurifier_VarParser::HASH:
                     $nvalue = '';
                     foreach ($value as $i => $v) {
-<<<<<<< HEAD
-=======
                         if (is_array($v)) {
                             // HACK
                             $v = implode(";", $v);
                         }
->>>>>>> master
                         $nvalue .= "$i:$v" . PHP_EOL;
                     }
                     $value = $nvalue;

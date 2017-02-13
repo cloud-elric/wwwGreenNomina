@@ -180,6 +180,17 @@ class SiteController extends Controller {
 			'fch_pago' => 40 
 	];
 	
+	public $columnasPagosExtras = [
+		'extra1'=>23,
+		'extra2'=>26,
+		'extra3'=>29
+	];
+	
+	public $columnasDeducciones = [
+			'deduccion1'=>41,
+			'deduccion2'=>42
+	];
+	
 	/**
 	 */
 	public function actionUploadFile() {
@@ -222,8 +233,10 @@ class SiteController extends Controller {
 				$datosBancario = $this->loadDatosBancarios ( $objWorksheet, $row, $empleado->id_empleado, $banco->id_banco );
 				$contacto = $this->loadEmpleadosContactos ( $objWorksheet, $row, $empleado->id_empleado );
 				$pago = $this->loadPago ( $objWorksheet, $row, $empleado->id_empleado, $banco->id_banco, $sucursales->id_sucursal, $tiposContratos->id_tipo_contrato, $nomina->id_nomina );
+				$this->loadPagosExtras($objWorksheet, $row, $empleado->id_empleado, $pago->id_pago_empleado);
+				$this->loadDeducciones($objWorksheet, $row, $empleado->id_empleado, $pago->id_pago_empleado);
 			}
-			echo ':D';
+			echo '';
 		}
 		
 		// return ['status'=>'error'];
@@ -448,6 +461,67 @@ class SiteController extends Controller {
 		return $contacto;
 	}
 	
+	public function loadPagosExtras($objWorksheet, $row, $idEmpleado, $idPago) {
+		
+		$pagosExtras = WrkPagosExtras::deleteAll(['id_empleado'=>$idEmpleado, 'id_nomina'=>$idPago]);
+		
+		$pago1 = $objWorksheet->getCellByColumnAndRow ( $this->columnasPagosExtras ['extra1'], $row )->getCalculatedValue ();
+		$pago2 = $objWorksheet->getCellByColumnAndRow ( $this->columnasPagosExtras ['extra2'], $row )->getCalculatedValue ();
+		$pago3 =$objWorksheet->getCellByColumnAndRow ( $this->columnasPagosExtras ['extra3'], $row )->getCalculatedValue ();
+		
+		$pagoExtra = new WrkPagosExtras();
+		$pagoExtra2 = new WrkPagosExtras();
+		$pagoExtra3 = new WrkPagosExtras();
+		
+		$pagoExtra->id_empleado = $idEmpleado;
+		$pagoExtra->id_nomina = $idPago;
+		$pagoExtra->txt_concepto = 'Venta playa';
+		$pagoExtra->num_monto = $pago1;
+		$pagoExtra->b_deposito = 0;
+		$pagoExtra->save();
+		
+		$pagoExtra2->id_empleado = $idEmpleado;
+		$pagoExtra2->id_nomina = $idPago;
+		$pagoExtra2->txt_concepto = 'Minivacs';
+		$pagoExtra2->num_monto = $pago2;
+		$pagoExtra2->b_deposito = 0;
+		$pagoExtra2->save();
+		
+		$pagoExtra3->id_empleado = $idEmpleado;
+		$pagoExtra3->id_nomina = $idPago;
+		$pagoExtra3->txt_concepto = 'Cita';
+		$pagoExtra3->num_monto = $pago3;
+		$pagoExtra3->b_deposito = 0;
+		$pagoExtra3->save();
+	
+		
+	}
+	
+	public function loadDeducciones($objWorksheet, $row, $idEmpleado, $idPago) {
+	
+		$pagosExtras = WrkDeduccionesEmpleado::deleteAll(['id_empleado'=>$idEmpleado, 'id_nomina'=>$idPago]);
+	
+		$deduccionPago1 = $objWorksheet->getCellByColumnAndRow ( $this->columnasDeducciones ['deduccion1'], $row )->getCalculatedValue ();
+		$deduccionPago2 = $objWorksheet->getCellByColumnAndRow ( $this->columnasDeducciones['deduccion2'], $row )->getCalculatedValue ();
+	
+		
+		$deduccion1 = new WrkDeduccionesEmpleado();
+		$deduccion2 = new WrkDeduccionesEmpleado();
+	
+		$deduccion1->id_empleado = $idEmpleado;
+		$deduccion1->id_nomina = $idPago;
+		$deduccion1->txt_concepto = 'Deducción 1';
+		$deduccion1->num_monto = doubleval($deduccionPago1);
+		$deduccion1->save();
+		
+		$deduccion2->id_empleado = $idEmpleado;
+		$deduccion2->id_nomina = $idPago;
+		$deduccion2->txt_concepto = 'Deducción 2';
+		$deduccion2->num_monto = doubleval($deduccionPago2);
+		$deduccion2->save();
+	
+	}
+	
 	/**
 	 *
 	 * @param unknown $objWorksheet        	
@@ -543,7 +617,8 @@ class SiteController extends Controller {
 				'id_empleado' => $emp->id_empleado 
 		] )->all ();
 		$extras = WrkPagosExtras::find ()->where ( [ 
-				'id_empleado' => $emp->id_empleado 
+				'id_empleado' => $emp->id_empleado,
+				'b_deposito'=>0
 		] )->all ();
 		
 		$ultimoPago = WrkPagosEmpleados::find()->where(['id_empleado'=>$emp->id_empleado])->orderBy('fch_pago DESC')->one();

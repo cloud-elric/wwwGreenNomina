@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\EntUsuarios */
 
-$this->title = 'Create Ent Usuarios';
+$this->title = 'Registrarse';
 $this->params['breadcrumbs'][] = ['label' => 'Ent Usuarios', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
