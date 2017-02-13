@@ -57,35 +57,7 @@ return array (
       '@yii/faker' => $vendorDir . '/yiisoft/yii2-faker',
     ),
   ),
-<<<<<<< HEAD
-  'kartik-v/yii2-krajee-base' =>
-  array (
-    'name' => 'kartik-v/yii2-krajee-base',
-	'version' => '1.8.5.0',
-	'alias' =>
-	array (
-	  '@kartik/base' => $vendorDir . '/kartik-v/yii2-krajee-base',
-	),
-  ),
-  'kartik-v/yii2-widget-growl' =>
-  array (
-	'name' => 'kartik-v/yii2-widget-growl',
-	'version' => '1.1.1.0',
-	'alias' =>
-	array (
-	  '@kartik/growl' => $vendorDir . '/kartik-v/yii2-widget-growl',
-	),
-  ),
-  'kartik-v/yii2-password' =>
-  array (
-	'name' => 'kartik-v/yii2-password',
-	'version' => '9999999-dev',
-	'alias' =>
-	array (
-	  '@kartik/password' => $vendorDir . '/kartik-v/yii2-password',
-	),
-  ),
-=======
+
 		'kartik-v/yii2-krajee-base' =>
 		array (
 				'name' => 'kartik-v/yii2-krajee-base',
@@ -113,5 +85,5 @@ return array (
 						'@kartik/password' => $vendorDir . '/kartik-v/yii2-password',
 				),
 		),
->>>>>>> master
+
 );
