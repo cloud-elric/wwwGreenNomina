@@ -162,7 +162,7 @@ $this->params ['breadcrumbs'] [] = $this->title;
         	'format' => 'raw',
         	'value' => function($data){
         		return Html::a(Utils::changeFormatDate($data->fch_pago),[
-        			'empleados/agregar-pago',
+        			'empleados/pago-empleado-fecha',
         			'id' => $data->id_empleado,
         			'idPago' => $data->id_pago_empleado
         		]);

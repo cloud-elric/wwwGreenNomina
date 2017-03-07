@@ -2,26 +2,30 @@
 
 namespace app\controllers;
 
-use Yii;
-use yii\filters\AccessControl;
-use yii\web\Controller;
-use yii\filters\VerbFilter;
-use app\models\LoginForm;
-use app\models\ContactForm;
-use yii\web\Response;
-use yii\web\UploadedFile;
-use app\models\EntEmpleados;
-use app\models\ViewEmpleadoCompleto;
-use app\models\WrkDeduccionesEmpleado;
-use app\models\WrkPagosExtras;
 use app\models\CatBancos;
 use app\models\CatNominas;
 use app\models\CatSucursales;
 use app\models\CatTiposContratos;
-use app\models\EntEmpleadosContactos;
+use app\models\ContactForm;
 use app\models\EntDatosBancarios;
+use app\models\EntEmpleados;
+use app\models\EntEmpleadosContactos;
+use app\models\LoginForm;
+use app\models\WrkDeduccionesEmpleado;
 use app\models\WrkPagosEmpleados;
+use app\models\WrkPagosExtras;
 use app\modules\ModUsuarios\models\Utils;
+use MadMimi\Connection;
+use MadMimi\CurlRequest;
+use MadMimi\Options\Mail\MailingList;
+use Yii;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
+use yii\web\Controller;
+use yii\web\Response;
+use yii\web\UploadedFile;
+use MadMimi\Options\Mail\Transactional;
+
 
 class SiteController extends Controller {
 	/**
@@ -32,12 +36,12 @@ class SiteController extends Controller {
 				'access' => [ 
 						'class' => AccessControl::className (),
 						'only' => [ 
-								'logout', 'index','empleado-quincena', 'subir-archivo', 'upload-file' 
+								'logout', 'index', 'subir-archivo', 'upload-file' 
 						],
 						'rules' => [ 
 								[ 
 										'actions' => [ 
-												'logout','index','empleado-quincena', 'subir-archivo', 'upload-file' 
+												'logout','index', 'subir-archivo', 'upload-file' 
 										],
 										'allow' => true,
 										'roles' => [ 
@@ -111,6 +115,12 @@ class SiteController extends Controller {
 		return $this->goHome ();
 	}
 	
+	public function actionLogoutEmpleado(){
+		Yii::$app->user->logout ();
+		
+		return $this->redirect(['site/login-empleados']);
+	}
+	
 	/**
 	 * Displays contact page.
 	 *
@@ -181,9 +191,12 @@ class SiteController extends Controller {
 	];
 	
 	public $columnasPagosExtras = [
-		'extra1'=>23,
-		'extra2'=>26,
-		'extra3'=>29
+		'extra1'=>22,
+		'extra2'=>25,
+		'extra3'=>28,
+		'extra5'=>30,
+		'extra4'=>32,
+		'extra6'=>35
 	];
 	
 	public $columnasDeducciones = [
@@ -194,6 +207,7 @@ class SiteController extends Controller {
 	/**
 	 */
 	public function actionUploadFile() {
+		
 		Yii::$app->response->format = Response::FORMAT_HTML;
 		ini_set ( 'max_execution_time', 36000 );
 		ini_set ( 'memory_limit', '512M' );
@@ -230,11 +244,17 @@ class SiteController extends Controller {
 				$sucursales = $this->loadSucursales ( $objWorksheet, $row );
 				$tiposContratos = $this->loadTipoContrato ( $objWorksheet, $row );
 				$empleado = $this->loadEmpleados ( $objWorksheet, $row, $sucursales->id_sucursal, $tiposContratos->id_tipo_contrato, $nomina->id_nomina );
+				if(!$empleado->errors){
+					
 				$datosBancario = $this->loadDatosBancarios ( $objWorksheet, $row, $empleado->id_empleado, $banco->id_banco );
 				$contacto = $this->loadEmpleadosContactos ( $objWorksheet, $row, $empleado->id_empleado );
 				$pago = $this->loadPago ( $objWorksheet, $row, $empleado->id_empleado, $banco->id_banco, $sucursales->id_sucursal, $tiposContratos->id_tipo_contrato, $nomina->id_nomina );
 				$this->loadPagosExtras($objWorksheet, $row, $empleado->id_empleado, $pago->id_pago_empleado);
 				$this->loadDeducciones($objWorksheet, $row, $empleado->id_empleado, $pago->id_pago_empleado);
+				}else{
+					echo $row;
+					//print_r($empleado->errors);
+				}
 			}
 			echo '';
 		}
@@ -347,7 +367,8 @@ class SiteController extends Controller {
 		
 		if (\PHPExcel_Shared_Date::isDateTime ( $objWorksheet->getCellByColumnAndRow ( $this->columnasEmpleado ['fch_alta'], $row ) )) {
 			$InvDate = $objWorksheet->getCellByColumnAndRow ( $this->columnasEmpleado ['fch_alta'], $row )->getValue ();
-			$fchAlta = date ( "Y-m-d H:i:s", \PHPExcel_Shared_Date::ExcelToPHP ( $InvDate ) );
+			$fchAlta = $this->datefix_excel($InvDate);
+			#$fchAlta = date ( "Y-m-d H:i:s", \PHPExcel_Shared_Date::ExcelToPHP ( $InvDate ) );
 		} else {
 			
 			$fchAlta = null;
@@ -355,7 +376,8 @@ class SiteController extends Controller {
 		
 		if (\PHPExcel_Shared_Date::isDateTime ( $objWorksheet->getCellByColumnAndRow ( $this->columnasEmpleado ['fch_baja'], $row ) )) {
 			$InvDate = $objWorksheet->getCellByColumnAndRow ( $this->columnasEmpleado ['fch_baja'], $row )->getValue ();
-			$fchBaja = date ( "Y-m-d H:i:s", \PHPExcel_Shared_Date::ExcelToPHP ( $InvDate ) );
+			$fchBaja = $this->datefix_excel($InvDate);
+			#$fchBaja = date ( "Y-m-d H:i:s", \PHPExcel_Shared_Date::ExcelToPHP ( $InvDate ) );
 		} else {
 			
 			$fchBaja = null;
@@ -468,32 +490,58 @@ class SiteController extends Controller {
 		$pago1 = $objWorksheet->getCellByColumnAndRow ( $this->columnasPagosExtras ['extra1'], $row )->getCalculatedValue ();
 		$pago2 = $objWorksheet->getCellByColumnAndRow ( $this->columnasPagosExtras ['extra2'], $row )->getCalculatedValue ();
 		$pago3 =$objWorksheet->getCellByColumnAndRow ( $this->columnasPagosExtras ['extra3'], $row )->getCalculatedValue ();
+		$pago4 =$objWorksheet->getCellByColumnAndRow ( $this->columnasPagosExtras ['extra4'], $row )->getCalculatedValue ();
+		$pago5 =$objWorksheet->getCellByColumnAndRow ( $this->columnasPagosExtras ['extra5'], $row )->getCalculatedValue ();
+		$pago6 =$objWorksheet->getCellByColumnAndRow ( $this->columnasPagosExtras ['extra6'], $row )->getCalculatedValue ();
 		
 		$pagoExtra = new WrkPagosExtras();
 		$pagoExtra2 = new WrkPagosExtras();
 		$pagoExtra3 = new WrkPagosExtras();
+		$pagoExtra4 = new WrkPagosExtras();
+		$pagoExtra5 = new WrkPagosExtras();
+		$pagoExtra6 = new WrkPagosExtras();
 		
 		$pagoExtra->id_empleado = $idEmpleado;
 		$pagoExtra->id_nomina = $idPago;
-		$pagoExtra->txt_concepto = 'Venta playa';
+		$pagoExtra->txt_concepto = 'FACTURACIÓN GREEN SUELDO FIJO';
 		$pagoExtra->num_monto = $pago1;
 		$pagoExtra->b_deposito = 0;
 		$pagoExtra->save();
 		
 		$pagoExtra2->id_empleado = $idEmpleado;
 		$pagoExtra2->id_nomina = $idPago;
-		$pagoExtra2->txt_concepto = 'Minivacs';
+		$pagoExtra2->txt_concepto = 'FACTURACIÓN Green';
 		$pagoExtra2->num_monto = $pago2;
 		$pagoExtra2->b_deposito = 0;
 		$pagoExtra2->save();
 		
 		$pagoExtra3->id_empleado = $idEmpleado;
 		$pagoExtra3->id_nomina = $idPago;
-		$pagoExtra3->txt_concepto = 'Cita';
+		$pagoExtra3->txt_concepto = 'FACTURACIÓN Green';
 		$pagoExtra3->num_monto = $pago3;
 		$pagoExtra3->b_deposito = 0;
 		$pagoExtra3->save();
 	
+		$pagoExtra4->id_empleado = $idEmpleado;
+		$pagoExtra4->id_nomina = $idPago;
+		$pagoExtra4->txt_concepto = 'FACTURACIÓN CITAS';
+		$pagoExtra4->num_monto = $pago4;
+		$pagoExtra4->b_deposito = 0;
+		$pagoExtra4->save();
+		
+		$pagoExtra5->id_empleado = $idEmpleado;
+		$pagoExtra5->id_nomina = $idPago;
+		$pagoExtra5->txt_concepto = 'FACTURACION DE DATOS';
+		$pagoExtra5->num_monto = $pago5;
+		$pagoExtra5->b_deposito = 0;
+		$pagoExtra5->save();
+		
+		$pagoExtra6->id_empleado = $idEmpleado;
+		$pagoExtra6->id_nomina = $idPago;
+		$pagoExtra6->txt_concepto = 'FACTURACION DE DATOS';
+		$pagoExtra6->num_monto = $pago6;
+		$pagoExtra6->b_deposito = 0;
+		$pagoExtra6->save();
 		
 	}
 	
@@ -541,8 +589,14 @@ class SiteController extends Controller {
 		$fechaPago = $objWorksheet->getCellByColumnAndRow ( $this->columnasPago ['fch_pago'], $row )->getCalculatedValue ();
 		
 		if (\PHPExcel_Shared_Date::isDateTime ( $objWorksheet->getCellByColumnAndRow ( $this->columnasPago ['fch_pago'], $row ) )) {
+			
 			$InvDate = $objWorksheet->getCellByColumnAndRow ( $this->columnasPago ['fch_pago'], $row )->getValue ();
-			$fechaPago = date ( "Y-m-d", \PHPExcel_Shared_Date::ExcelToPHP ( $InvDate ) );
+			$fechaPago =  $this->datefix_excel($InvDate);
+			
+			#$fechaPago = date ( "Y-m-d", \PHPExcel_Shared_Date::ExcelToPHP ( $InvDate ) );
+			
+			echo $fechaPago;
+			exit;
 		} else {
 			
 			$fechaPago = Utils::getFechaActual ();
@@ -570,9 +624,16 @@ class SiteController extends Controller {
 		$ultimoPago->save ();
 		return $ultimoPago;
 	}
+	
+	public function datefix_excel($excel) {
+	
+		$dif=(41885-$excel)*86400;
+		$seconds=1409737670-$dif;
+		$date=date("Y-m-d",$seconds);
+		return $date; }
 	public function actionEmpleadoQuincena() {
 		$this->enableCsrfValidation = false;
-		
+		$this->layout = 'mainEmpleado';
 		$session = Yii::$app->session;
 		$usu = null;
 		$pass = null;
@@ -587,8 +648,6 @@ class SiteController extends Controller {
 				$pass = $_POST['pass'];
 			}
 			
-		
-		
 		$empleado = $session->get ( 'empleado' );
 		
 		
@@ -596,45 +655,76 @@ class SiteController extends Controller {
 		// echo $pass;
 		// exit();
 		
-		$emp = EntEmpleados::find ()->where ( [ 
+		$empleado = EntEmpleados::find ()->where ( [ 
 				'txt_usuario' =>  $usu
 		] )->andWhere ( [ 
 				'txt_password' => $pass
 		] )->one ();
 		
-		if(empty($emp)){
-			
+		if(empty($empleado)){
+			Yii::$app->session->setFlash('error', 'Usuario y/o contraseña incorrecto');
 			return $this->redirect(['login-empleados']);
 		}
 		
-		$session->set ( 'empleado', $emp);
+		$session->set ( 'empleado', $empleado);
 		
 		
-		$empleado = ViewEmpleadoCompleto::find ()->where ( [ 
-				'id_empleado' => $emp->id_empleado, 
+		$ultimoPago = WrkPagosEmpleados::find()->where(['id_empleado'=>$empleado->id_empleado])->orderBy('fch_pago DESC')->one();
+		
+		$deducciones = WrkDeduccionesEmpleado::find ()->where ( [
+				'id_empleado' => $empleado->id_empleado,
+				'id_nomina'=>$ultimoPago->id_pago_empleado
 		] )->all ();
-		$deducciones = WrkDeduccionesEmpleado::find ()->where ( [ 
-				'id_empleado' => $emp->id_empleado 
-		] )->all ();
-		$extras = WrkPagosExtras::find ()->where ( [ 
-				'id_empleado' => $emp->id_empleado,
+		$extras = WrkPagosExtras::find ()->where ( [
+				'id_empleado' => $empleado->id_empleado,
+				'id_nomina'=>$ultimoPago->id_pago_empleado,
 				'b_deposito'=>0
 		] )->all ();
 		
-		$ultimoPago = WrkPagosEmpleados::find()->where(['id_empleado'=>$emp->id_empleado])->orderBy('fch_pago DESC')->one();
+		$depositos = WrkPagosExtras::find ()->where ( [
+				'id_empleado' => $empleado->id_empleado,
+				'id_nomina'=>$ultimoPago->id_pago_empleado,
+				'b_deposito'=>1
+		] )->all ();
+		
+		
 		
 		return $this->render ( 'empleadoQuincena', [ 
 				'empleado' => $empleado,
 				'deducciones' => $deducciones,
 				'extras' => $extras ,
-				'ultimoPago'=>$ultimoPago
+				'ultimoPago'=>$ultimoPago,
+				'depositos'=>$depositos
 		] );
 		
 	}
 	public function actionLoginEmpleados() {
 		$session = Yii::$app->session;
+		$this->layout = 'mainEmpleado';
 		$session->set ( 'empleado', [ ] );
 		
 		return $this->render ( 'loginEmpleados' );
+	}
+	
+	public function actionGenerarPass(){
+		echo Yii::$app->security->generatePasswordHash ( '98765432' );
+	}
+	
+	public function actionEnviarEmailApi(){
+		
+		$connection = new Connection('humberto@2gom.com.mx', 'eadc1b012973cd02f1b38722f9839baa', new CurlRequest());
+		
+		$options = new Transactional();
+		$options->setTo('humberto@2gom.com.mx', 'Humberto Antonio');
+		$options->setHTML('<html>Hello world</html>');
+		$options->setPromotionName('Test');
+		
+// // 		$options = new Transactional();
+// // 		$options->setPromotionName('Meaning of Life')
+// // 		->setPlaceholderValues(['answer'=>'42'])
+// // 		->setTo('iluvcoastlines@planetdesigners.com', 'Slartibartfast');
+		
+ 		$transactionId = $connection->request($options);
+		
 	}
 }

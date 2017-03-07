@@ -6,9 +6,8 @@ $(document).ready(function() {
 	$('.js-subir-registros').on('click', function(e) {
 		e.preventDefault();
 	 	l.start();
-		
 		// la variable droppedFiles se encuentra en el archivo drag.js
-		if(droppedFiles || $('#js-file-excel').val()){
+		if(archivoDropped || $('#js-file-excel').val()){
 			uploadFile();
 		}else{
 			 swal("Espera",
@@ -24,19 +23,19 @@ $(document).ready(function() {
 function uploadFile(){
 	
 	var form = document.getElementById('js-form-upload-excel');
-	 var data = new FormData(form);
+	// var data = new FormData(form);
 
 	// gathering the form data
 		var ajaxData = new FormData( form );
-		if( droppedFiles )
+		if( archivoDropped )
 		{
-			ajaxData.append('fileUpload', droppedFiles.files[0]);
+			ajaxData.append('fileUpload', archivoDropped);
 		}
 	
 	$.ajax({
 		url: basePath+'site/upload-file',
 		type : "POST",
-        data : data,
+        data : ajaxData,
         dataType:'HTML',
         processData : false,
         contentType : false,
@@ -83,7 +82,12 @@ function uploadFile(){
             alert("Failed");
         },
 		success:function(resp){
-			$('.js-data-excel').html(resp);
+			
+			 swal("Listo",
+						"Se ha cargado la información correctamente.",
+						"success");
+			
+			//$('.js-data-excel').html(resp);
 			l.stop();
 			
 		}

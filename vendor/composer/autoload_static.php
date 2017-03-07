@@ -27,6 +27,19 @@ class ComposerStaticInit9f26747bf3436e886a43e799ea103526
         array (
             'cebe\\markdown\\' => 14,
         ),
+        'S' => 
+        array (
+            'Symfony\\Component\\Yaml\\' => 23,
+        ),
+        'P' => 
+        array (
+            'Psr\\Log\\' => 8,
+        ),
+        'M' => 
+        array (
+            'Monolog\\' => 8,
+            'MadMimi\\' => 8,
+        ),
         'F' => 
         array (
             'Faker\\' => 6,
@@ -69,6 +82,22 @@ class ComposerStaticInit9f26747bf3436e886a43e799ea103526
         'cebe\\markdown\\' => 
         array (
             0 => __DIR__ . '/..' . '/cebe/markdown',
+        ),
+        'Symfony\\Component\\Yaml\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/yaml',
+        ),
+        'Psr\\Log\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
+        ),
+        'Monolog\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
+        ),
+        'MadMimi\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/aaronsaray/madmimi-api-php/src/MadMimi',
         ),
         'Faker\\' => 
         array (

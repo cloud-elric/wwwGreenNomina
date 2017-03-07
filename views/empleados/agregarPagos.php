@@ -7,7 +7,7 @@ use app\models\WrkPagosEmpleados;
 use yii\helpers\Url;
 use app\models\Utils;
 
-$this->title = 'Pagos extras';
+$this->title = 'Depositos';
 $this->params['breadcrumbs'][] = ['label' => 'Empleados', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => 'Pagos', 'url' => ['pagos-extras?id='.$extras->id_empleado]];
 $this->params['breadcrumbs'][] = $this->title;

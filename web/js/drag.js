@@ -2,6 +2,7 @@
 'use strict';
 var extensionesPermitidas = new Array(".xlsx", ".xls");
 var droppedFiles = false;
+var archivoDropped = false;
 	;( function ( document, window, index )
 	{
 		// feature detection for drag&drop upload
@@ -81,12 +82,12 @@ var droppedFiles = false;
 				{
 					
 					droppedFiles = e.dataTransfer.files; // the files that were dropped
-				
+					archivoDropped = e.dataTransfer.files[0];
 				if(validarExtensionNombre(e.dataTransfer.files[0].name)){
 					showFiles( droppedFiles );
 				}
 				
-				droppedFiles = null;
+				//droppedFiles = null;
 									});
 					
 			}
@@ -261,4 +262,6 @@ var droppedFiles = false;
 			} else { // normal reset behavior for other sane browsers
 				$input.val('');
 			}
+			
+			archivoDropped = false;
 		}		

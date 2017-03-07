@@ -2,7 +2,20 @@
 use app\models\CatBancos;
 use app\models\Utils;
 
-$usuario = $empleado;
+$this->params ['breadcrumbs'] [] = [
+		'label' => 'Empleados',
+		'url' => [
+				'index'
+		]
+];
+$this->params ['breadcrumbs'] [] = ['label' => $empleado->txt_nombre,
+		'url' => [
+				'empleados/'.$empleado->id_empleado
+		]];
+
+	$usuario = $empleado;
+
+
 ?>
 <div class="panel">
 <div class="panel-body">
