@@ -74,7 +74,7 @@ $totalDeposito = 0;
 <h2>Pago</h2>
 
 <?php if($ultimoPago){
-	$totalNomina = round($ultimoPago->num_total_sueldo_fijo);
+	$totalNomina = round($ultimoPago->num_total_sueldo_fijo , 2);
 	?>
 	
 	<table style="
@@ -87,8 +87,8 @@ $totalDeposito = 0;
 </tr>
 <tr>
 <td><?=$ultimoPago->num_dias_trabajados?></td>
-<td><?=$ultimoPago->num_sueldo?></td>
-<td><?=round($ultimoPago->num_total_sueldo_fijo)?></td>
+<td><?=round($ultimoPago->num_sueldo, 2)?></td>
+<td><?=round($ultimoPago->num_total_sueldo_fijo, 2)?></td>
 </tr>
 </table>
 	
@@ -103,12 +103,15 @@ $totalDeposito = 0;
 <td>Concepto</td>
 <td>Monto</td>
 </tr>
-<?php if(count($extras) >= 1){
+<?php 
+$totalVariables = 0;
+if(count($extras) >= 1){
 				foreach($extras as $ext){
+					$totalVariables +=$ext->num_monto;
 			?>
 					<tr>
 						<td><?= $ext->txt_concepto?></td>
-						<td><?= $ext->num_monto?></td>
+						<td><?= round($ext->num_monto, 2)?></td>
 					</tr>
 			<?php 
 					$totalExtra += $ext->num_monto;
@@ -118,7 +121,7 @@ $totalDeposito = 0;
 			
 			
 <?php }?>			
-
+<tr style="border-top:1px solid black"><td>Total variables</td><td><?=round($totalVariables,2)?></td></tr>
 </table>
 
 <h2>Deducciones</h2>
@@ -135,7 +138,7 @@ $totalDeposito = 0;
 			?>
 					<tr>
 						<td><?= $ded->txt_concepto?></td>
-						<td><?= $ded->num_monto?></td>
+						<td><?= round($ded->num_monto, 2)?></td>
 					</tr>
 			<?php 
 					$totalExtra -= $ded->num_monto;
@@ -176,8 +179,8 @@ $totalDeposito = 0;
 
 </table>
 
-<h2>Total pagado: <?=$totalExtra+$totalNomina?></h2>
-<h2>Total depositado:<?=$totalDeposito?></h2>
+<h2>Total pagado: <?=round($totalExtra+$totalNomina, 2)?></h2>
+<h2>Total depositado:<?=round($totalDeposito, 2)?></h2>
 <!-- <table style="
     width: 100%;
 ">

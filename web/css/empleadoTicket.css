@@ -1,0 +1,119 @@
+body{
+  background-color:#88CAC9;
+}
+/*section*/
+.main{
+	/*background:#ffffff;*/
+	
+}
+
+
+aside{
+
+    
+	color:#000000;
+	
+}
+
+img{
+	
+}
+
+aside.izquierdo{
+    align-items: center;
+    justify-content: center;
+     
+}
+
+aside.izquierdo>div{
+	text-align:center;
+	margin-top: 40%;
+}
+
+img.pequenia{
+  width:20%; 
+  height:20%;
+  display:inline;
+  margin-left:05px;
+  padding-top:5px;
+
+}
+			
+.image1{
+	
+     
+    
+}
+
+img .imagen_recibo{
+	
+	 max-width: 200px;
+	 display:block;
+	 
+}
+
+
+div  .nombre{
+	
+   text-align:center;
+   color:#000000;
+   font-size:16px;
+}
+
+h3 .pagos{
+	
+	 margin-left:10px;
+	 padding-top:500px;
+}
+.titulo1{
+   margin-top: 0;
+   
+}
+
+.titulo{
+	
+	padding: 0 150px 0 150px;
+    margin-top: 5px;
+}
+					
+.row.contenedor-datos{
+	padding: 15px;
+    background-color: #505151;
+	margin-right:30px;
+	padding-top:30px;
+	padding-bottom:30px;
+}
+
+.contenedor-valor{
+	background-color: white;
+    padding: 6px 0px;
+    text-align: right;
+    padding-right: 10px;
+
+}
+.contenedor-final{
+	
+	font-size:18px;
+	padding:6px 0px;
+	color:#505151;
+}
+
+div .campos_formulario{
+	color:#2FF4E9;
+}
+
+p.usuario{
+	text-align:center;
+	display:block;
+	font-size: medium;
+	color:#62B2AE;
+	
+}
+
+
+
+.vcenter{
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}

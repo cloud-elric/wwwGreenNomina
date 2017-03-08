@@ -1,254 +1,158 @@
 <?php
 use app\models\CatBancos;
 use app\models\Utils;
+use yii\helpers\Url;
 
 $usuario = $empleado;
-?>
-<div class="panel">
-<div class="panel-body">
-<h2>Datos empleados</h2>
-<table style="
-    width: 100%;
-">
-	<tr>
-		<th>No. empleado</th>
-		<th>Nombre</th>
-		<th>Rfc</th>
-		<th>Seguro Social</th>
-		<th>Fecha de alta</th>
-		<th>Email</th>
-	</tr>
-	<tr>
-		<?php 
-		$usuario->fch_alta = Utils::changeFormatDate($usuario->fch_alta);
-		?>
-		<td><?= $usuario->num_empleado ?></td>
-		<td><?= $usuario->txt_nombre ?></td>
-		<td><?= $usuario->txt_rfc ?></td>
-		<td><?= $usuario->num_seguro_social ?></td>
-		<td><?= $usuario->fch_alta ?></td>
-		<td><?= $usuario->entEmpleadosContactos->txt_mail_contacto ?></td>
-	</tr>
-</table>
-
-<h2>Datos Bancarios</h2>
-<table style="
-    width: 100%;
-">
-	<tr>
-		<th>Banco</th>
-		<th>No. cuenta</th>
-		<th>Clabe</th>
-	</tr>
-	<tr>
-		<td><?php $banco = CatBancos::find()->where(['id_banco'=>$ultimoPago->id_banco])->one();
-			echo $banco->txt_nombre;
-			$datosBancarios = $usuario->entDatosBancarios;
-		?></td>
-		<td><?= $datosBancarios->txt_numero_cuenta ?></td>
-		<td><?= $datosBancarios->txt_clabe ?></td>
-	</tr>
-</table>
-
-<?php 
 $totalExtra = 0;
 $totalDeduccion = 0;
-$totalNomina =0;
+$totalNomina = 0;
 
 $totalDeposito = 0;
+
+$this->registerCssFile(
+		'@web/css/empleadoTicket.css',
+		['depends' => [\yii\web\JqueryAsset::className()]]
+		);
 ?>
 
-<h2>Pago</h2>
 
-<?php if($ultimoPago){
-	$totalNomina = round($ultimoPago->num_total_sueldo_fijo);
-	?>
-	
-	<table style="
-    width: 100%;
-">
-<tr>
-<th>Días trabajados</th>
-<th>Sueldo</th>
-<th>Total</th>
-</tr>
-<tr>
-<td><?=$ultimoPago->num_dias_trabajados?></td>
-<td><?=$ultimoPago->num_sueldo?></td>
-<td><?=round($ultimoPago->num_total_sueldo_fijo)?></td>
-</tr>
-</table>
-	
-	<?php 
-}?>
+<!--alineacion de fila con class CONTAINER para el section-->
+	<section class="row">
 
-<h2>Pagos extras</h2>
-<table style="
-    width: 100%;
-">
-<tr>
-<td>Concepto</td>
-<td>Monto</td>
-</tr>
-<?php if(count($extras) >= 1){
-				foreach($extras as $ext){
-			?>
-					<tr>
-						<td><?= $ext->txt_concepto?></td>
-						<td><?= $ext->num_monto?></td>
-					</tr>
-			<?php 
-					$totalExtra += $ext->num_monto;
-				}
-			}else {		
-			?>
+		<div class="col-md-8 col-md-offset-2">
+			<div class="panel">
+				<div class="panel-body">
+
+					<div class="row">
+
+						<aside class="col-xs-12 col-sm-4 col-md-4 izquierdo">
+							<div>
+								<img class="image1" src="<?=Url::base()?>/images/icono_foto.png" />
+
+								<div class="nombre">
+									<center>Nombre:</center>
+									<p class="usuario text-primary"><?= $usuario->txt_nombre ?> </p>
+									<div></div>
+						
+						</aside>
+						<div class="col-xs-12 col-sm-7 col-md-8">
+
+							<div class="row">
+								<center>
+									<h3 class="titulo">
+										Pagos<img class="pequenia" src="<?=Url::base()?>/images/recibo.png" />
+									</h3>
+								</center>
+
+							</div>
+							<h3 class="titulo1">Pago</h3>
+							<div class="row contenedor-datos">
+								<div class="campos_formulario col-xs-12 col-sm-4 col-md-4">Dias
+									trabajados</div>
+								<div class="campos_formulario col-xs-12 col-sm-4 col-md-4">Sueldo</div>
+								<div class="campos_formulario col-xs-12 col-sm-4 col-md-4">Total:</div>
+								<!--datos del input-->
+								<div class="col-xs-12 col-sm-4 col-md-4">
+									<div class="contenedor-valor"><?=$ultimoPago->num_dias_trabajados?></div>
+								</div>
+								<div class="col-xs-12 col-sm-4 col-md-4">
+									<div class="contenedor-valor"><?=round($ultimoPago->num_sueldo,2)?></div>
+								</div>
+								<div class="col-xs-12 col-sm-4 col-md-4">
+									<div class="contenedor-valor"><?=round($ultimoPago->num_total_sueldo_fijo, 2)?></div>
+								</div>
+							</div>
+
+							<h3>Pago extras</h3>
+
+							<div class="row contenedor-datos">
+							<?php
+							foreach ( $extras as $ext ) {
+								?>
+							
+							<div class="campos_formulario col-xs-8 col-sm-6 col-md-8">
+									<?= $ext->txt_concepto?></div>
+								<div class="col-xs-4 col-sm-6 col-md-4">
+									<div class="contenedor-valor">$ <?= $ext->num_monto?round($ext->num_monto,2):'0'?></div>
+									&nbsp;
+								</div>
+						
+						
+						<?php
+								$totalExtra += $ext->num_monto;
+							}
+							?>
+							
+							</div>
+
+							<h3>Deducciones</h3>
+
+							<div class="row contenedor-datos">
+							<?php
+							
+							foreach ( $deducciones as $ded ) {
+								?>
+								<div class="campos_formulario col-xs-8 col-sm-6 col-md-8">
+									<?= $ded->txt_concepto?></div>
+
+								<div class="col-xs-8 col-sm-6 col-md-4">
+									<div class="contenedor-valor">$<?= $ded->num_monto?round($ded->num_monto,2):'0'?></div>
+									&nbsp;
+								</div>
 			
-			
-<?php }?>			
-
-</table>
-
-<h2>Deducciones</h2>
-<table style="
-    width: 100%;
-">
-<tr>
-<td>Concepto</td>
-<td>Monto</td>
-</tr>
-<?php
-
-				foreach($deducciones as $ded){
-			?>
-					<tr>
-						<td><?= $ded->txt_concepto?></td>
-						<td><?= $ded->num_monto?></td>
-					</tr>
-			<?php 
-					$totalExtra -= $ded->num_monto;
-				}
-				
-			?>
-			
-			
-			
-
-</table>
+							<?php
+								$totalExtra -= $ded->num_monto;
+							}
+							
+							?>
+								
+							</div>
 
 
-<h2>Depositos</h2>
-<table style="
-    width: 100%;
-">
-<tr>
-<td>Concepto</td>
-<td>Monto</td>
-</tr>
-<?php
+							<h3>Depositos</h3>
+							<div class="row contenedor-datos">
+							
+							<?php
+							
+							foreach ( $depositos as $dep ) {
+								?>
+	<div class="campos_formulario col-xs-8 col-sm-6 col-md-8">
+									<?= $dep->txt_concepto?></div>
+								<div class="col-xs-8 col-sm-6 col-md-4">
+									<div class="contenedor-valor">$ <?= $dep->num_monto?round($dep->num_monto,2):'0'?></div>
+								</div>
+			<?php
+								$totalDeposito += $dep->num_monto;
+							}
+							
+							?>
+							</div>
 
-				foreach($depositos as $dep){
-			?>
-					<tr>
-						<td><?= $dep->txt_concepto?></td>
-						<td><?= $dep->num_monto?></td>
-					</tr>
-			<?php 
-					$totalDeposito+=$dep->num_monto;
-				}
-				
-			?>
-			
-			
-			
 
-</table>
+							<div class="row">
+								<div class="contenedor-final col-xs-12 col-md-6">Total
+									pagado: $ <?=round(($totalExtra+$ultimoPago->num_total_sueldo_fijo),2)?></div>
+								<div class="contenedor-final col-xs-6 col-md-6">Total
+									depositado: $ <?=round($totalDeposito,2)?></div>
+							</div>
 
-<h2>Total pagado: <?=$totalExtra+$totalNomina?></h2>
-<h2>Total depositado:<?=$totalDeposito?></h2>
-<!-- <table style="
-    width: 100%;
-">
-	<tr>
-		<th>Percepciones</th>
-		<th>Deducciones</th>
-	</tr>
-	<tr>
-		<table >
-			<tr>
-				<th>Concepto</th>
-				<th>Monto</th>
-			</tr>
-			<?php if(count($extras) >= 1){
-				foreach($extras as $ext){
-			?>
-					<tr>
-						<td><?= $ext->txt_concepto?></td>
-						<td><?= $ext->num_monto?></td>
-					</tr>
-			<?php 
-					$totalExtra += $ext->num_monto;
-				}
-			}else if(count($extras) == 0){		
-			?>
-				<tr>
-					<td></td>
-					<td></td>
-				</tr>
-			<?php }else{?>
-				<tr>
-					<td><?= $extras->txt_concepto?></td>
-					<td><?= $extras->num_monto?></td>
-				</tr>
-			<?php 
-				$totalExtra += $extras->num_monto;
-			}
-			?>
-			<tr>
-				<td>Total</td>
-				<td><?= $totalExtra ?></td>
-			</tr>
-		</table>
-	</tr>
-	<tr>
-		<table>
-			<tr>
-				<th>Concepto</th>
-				<th>Monto</th>
-			</tr>
-			<?php if(count($deducciones) > 1){
-				foreach($deducciones as $decc){
-			?>
-					<tr>
-						<td><?= $decc->txt_concepto?></td>
-						<td><?= $decc->num_monto?></td>
-					</tr>
-			<?php 
-					$totalDeduccion += $decc->num_monto;
-				}
-			}else if(Count($deducciones == 0)){
-			?>
-				<tr>
-					<td></td>
-					<td></td>
-				</tr>
-			<?php		
-			}else{
-			?>
-				<tr>
-					<td><?= $deducciones->txt_concepto?></td>
-					<td><?= $deducciones->num_monto?></td>
-				</tr>
-			<?php 
-				$totalDeduccion += $deducciones->num_monto;
-			}
-			?>
-			<tr>
-				<td>Total</td>
-				<td><?= $totalDeduccion ?></td>
-			</tr>
-		</table>
-	</tr>
-</table> -->
+
+						</div>
+
+					</div>
+
+
+				</div>
+
+			</div>
+		</div>
+
+	</section>
+	<!--fin de section con filas row-->
+
+	<!--definir clase clear para acomodo de la informaciòn despues de ingresarla-->
+	<div class="clearflix visible-sm-block"></div>
 
 </div>
-</div>
+<!--fin de la fila row-->

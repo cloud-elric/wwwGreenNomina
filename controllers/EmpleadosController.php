@@ -221,8 +221,12 @@ class EmpleadosController extends Controller {
 				'query' => $pagos 
 		] );
 		
+		$empleado = EntEmpleados::find()->where([
+				'id_empleado'=>$id
+		])->one();
 		return $this->render ( 'pagosExtras', [ 
-				'dataProvider' => $dataProvider 
+				'dataProvider' => $dataProvider,
+				'empleado'=>$empleado
 		] );
 	}
 	public function actionAgregarPago($id, $idPago) {

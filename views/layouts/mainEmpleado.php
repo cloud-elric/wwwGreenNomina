@@ -29,7 +29,7 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => 'Pagos',
+        'brandLabel' => 'My green page',
         'brandUrl' => '',
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
@@ -60,7 +60,7 @@ true ? (
     NavBar::end();
     ?>
 
-    <div class="container">
+    <div class="container-fluid" style="margin-top:100px;">
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
@@ -70,14 +70,6 @@ true ? (
         <?= $content ?>
     </div>
 </div>
-
-<footer class="footer">
-    <div class="container">
-        <p class="pull-left">&copy; Green <?= date('Y') ?></p>
-
-        <p class="pull-right">Desarrollado por 2 Geeks one Monkey</p>
-    </div>
-</footer>
 
 <?php $this->endBody() ?>
 </body>
