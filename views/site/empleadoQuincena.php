@@ -41,17 +41,17 @@ $this->registerCssFile(
 							<div class="row">
 								<center>
 									<h3 class="titulo">
-										Pagos<img class="pequenia" src="<?=Url::base()?>/images/recibo.png" />
+										Datos Empleado<img class="pequenia" src="<?=Url::base()?>/images/recibo.png" />
 									</h3>
 								</center>
 
 							</div>
-							<h3 class="titulo1">Pago</h3>
+							<h3 class="titulo1">Fijos</h3>
 							<div class="row contenedor-datos">
 								<div class="campos_formulario col-xs-12 col-sm-4 col-md-4">Dias
 									trabajados</div>
-								<div class="campos_formulario col-xs-12 col-sm-4 col-md-4">Sueldo</div>
-								<div class="campos_formulario col-xs-12 col-sm-4 col-md-4">Total:</div>
+								<div class="campos_formulario col-xs-12 col-sm-4 col-md-4">Dias mensuales</div>
+								<div class="campos_formulario col-xs-12 col-sm-4 col-md-4">Subtotal:</div>
 								<!--datos del input-->
 								<div class="col-xs-12 col-sm-4 col-md-4">
 									<div class="contenedor-valor"><?=$ultimoPago->num_dias_trabajados?></div>
@@ -64,7 +64,7 @@ $this->registerCssFile(
 								</div>
 							</div>
 
-							<h3>Pago extras</h3>
+							<h3>Extras</h3>
 
 							<div class="row contenedor-datos">
 							<?php
@@ -74,7 +74,7 @@ $this->registerCssFile(
 							<div class="campos_formulario col-xs-8 col-sm-6 col-md-8">
 									<?= $ext->txt_concepto?></div>
 								<div class="col-xs-4 col-sm-6 col-md-4">
-									<div class="contenedor-valor">$ <?= $ext->num_monto?round($ext->num_monto,2):'0'?></div>
+									<div class="contenedor-valor"><?= $ext->num_monto?round($ext->num_monto,2):'0'?></div>
 									&nbsp;
 								</div>
 						
@@ -86,7 +86,7 @@ $this->registerCssFile(
 							
 							</div>
 
-							<h3>Deducciones</h3>
+							<h3>Menos</h3>
 
 							<div class="row contenedor-datos">
 							<?php
@@ -97,7 +97,7 @@ $this->registerCssFile(
 									<?= $ded->txt_concepto?></div>
 
 								<div class="col-xs-8 col-sm-6 col-md-4">
-									<div class="contenedor-valor">$<?= $ded->num_monto?round($ded->num_monto,2):'0'?></div>
+									<div class="contenedor-valor"><?= $ded->num_monto?round($ded->num_monto,2):'0'?></div>
 									&nbsp;
 								</div>
 			
@@ -110,7 +110,7 @@ $this->registerCssFile(
 							</div>
 
 
-							<h3>Depositos</h3>
+							<h3>Mas</h3>
 							<div class="row contenedor-datos">
 							
 							<?php
@@ -120,7 +120,7 @@ $this->registerCssFile(
 	<div class="campos_formulario col-xs-8 col-sm-6 col-md-8">
 									<?= $dep->txt_concepto?></div>
 								<div class="col-xs-8 col-sm-6 col-md-4">
-									<div class="contenedor-valor">$ <?= $dep->num_monto?round($dep->num_monto,2):'0'?></div>
+									<div class="contenedor-valor"><?= $dep->num_monto?round($dep->num_monto,2):'0'?></div>
 								</div>
 			<?php
 								$totalDeposito += $dep->num_monto;
@@ -131,10 +131,10 @@ $this->registerCssFile(
 
 
 							<div class="row">
-								<div class="contenedor-final col-xs-12 col-md-6">Total
-									pagado: $ <?=round(($totalExtra+$ultimoPago->num_total_sueldo_fijo),2)?></div>
+								<div class="contenedor-final col-xs-12 col-md-6">Original
+									:<?=round(($totalExtra+$ultimoPago->num_total_sueldo_fijo),2)?></div>
 								<div class="contenedor-final col-xs-6 col-md-6">Total
-									depositado: $ <?=round($totalDeposito,2)?></div>
+									:<?=round($totalDeposito,2)?></div>
 							</div>
 
 
