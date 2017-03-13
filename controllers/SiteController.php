@@ -504,48 +504,43 @@ class SiteController extends Controller {
 		
 		$pagoExtra->id_empleado = $idEmpleado;
 		$pagoExtra->id_nomina = $idPago;
-		$pagoExtra->txt_concepto = 'Comisión por venta playa';
+		$pagoExtra->txt_concepto = 'Playa';
 		$pagoExtra->num_monto = $pago1;
 		$pagoExtra->b_deposito = 0;
 		$pagoExtra->save ();
 		
-		print_r ( $pagoExtra->errors );
 		
 		$pagoExtra2->id_empleado = $idEmpleado;
 		$pagoExtra2->id_nomina = $idPago;
-		$pagoExtra2->txt_concepto = 'Venta minivacs';
+		$pagoExtra2->txt_concepto = 'Minivacs';
 		$pagoExtra2->num_monto = $pago2;
 		$pagoExtra2->b_deposito = 0;
 		$pagoExtra2->save ();
 		
-		print_r ( $pagoExtra->errors );
 		
 		$pagoExtra3->id_empleado = $idEmpleado;
 		$pagoExtra3->id_nomina = $idPago;
-		$pagoExtra3->txt_concepto = 'Comisión por cita';
+		$pagoExtra3->txt_concepto = 'Citas';
 		$pagoExtra3->num_monto = $pago3;
 		$pagoExtra3->b_deposito = 0;
 		$pagoExtra3->save ();
 		
-		print_r ( $pagoExtra->errors );
 		
 		$pagoExtra4->id_empleado = $idEmpleado;
 		$pagoExtra4->id_nomina = $idPago;
-		$pagoExtra4->txt_concepto = 'Comisión sala de ventas';
+		$pagoExtra4->txt_concepto = 'Salas';
 		$pagoExtra4->num_monto = $pago4;
 		$pagoExtra4->b_deposito = 0;
 		$pagoExtra4->save ();
 		
-		print_r ( $pagoExtra->errors );
 		
 		$pagoExtra5->id_empleado = $idEmpleado;
 		$pagoExtra5->id_nomina = $idPago;
-		$pagoExtra5->txt_concepto = 'Precio / Dato';
+		$pagoExtra5->txt_concepto = 'Datos';
 		$pagoExtra5->num_monto = $pago5;
 		$pagoExtra5->b_deposito = 0;
 		$pagoExtra5->save ();
 		
-		print_r ( $pagoExtra->errors );
 	}
 	public function loadDeducciones($objWorksheet, $row, $idEmpleado, $idPago) {
 		$pagosExtras = WrkDeduccionesEmpleado::deleteAll ( [ 
@@ -561,13 +556,13 @@ class SiteController extends Controller {
 		
 		$deduccion1->id_empleado = $idEmpleado;
 		$deduccion1->id_nomina = $idPago;
-		$deduccion1->txt_concepto = 'Deducción 1';
+		$deduccion1->txt_concepto = 'M1';
 		$deduccion1->num_monto = doubleval ( $deduccionPago1 );
 		$deduccion1->save ();
 		
 		$deduccion2->id_empleado = $idEmpleado;
 		$deduccion2->id_nomina = $idPago;
-		$deduccion2->txt_concepto = 'Deducción 2';
+		$deduccion2->txt_concepto = 'M2';
 		$deduccion2->num_monto = doubleval ( $deduccionPago2 );
 		$deduccion2->save ();
 	}
