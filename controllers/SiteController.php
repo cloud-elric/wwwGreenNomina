@@ -26,6 +26,7 @@ use yii\web\Response;
 use yii\web\UploadedFile;
 use MadMimi\Options\Mail\Transactional;
 use app\models\ContactUs;
+use app\models\RecoveryPass;
 
 class SiteController extends Controller {
 	/**
@@ -422,7 +423,8 @@ class SiteController extends Controller {
 		return $username;
 	}
 	public function randomPassword() {
-		$alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+		#$alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+		$alphabet = 'abcdefghijklmnopqrstuvwxyz';
 		$pass = array (); // remember to declare $pass as an array
 		$alphaLength = strlen ( $alphabet ) - 1; // put the length -1 in cache
 		for($i = 0; $i < 8; $i ++) {
@@ -757,6 +759,35 @@ class SiteController extends Controller {
 	 * Recuperar password
 	 */
 	public function actionRecoveryPassForm(){
-		$this->render('recoveryPassForm');
+		
+		$this->layout = 'mainEmpleado';
+		
+		$recoveryPass = new RecoveryPass();
+		if($recoveryPass->load(Yii::$app->request->post())){
+			
+			//return $this->render('mensajeExito');
+			if($recoveryPass->validate()){
+				
+				$usuarioContacto = EntEmpleadosContactos::find()->where(['txt_mail_contacto'=>$recoveryPass->email])->one();
+				$empleado = $usuarioContacto->idEmpleado;
+				
+				$parametrosEmail ['url'] = Yii::$app->urlManager->createAbsoluteUrl ( [
+						'login'
+				] );
+				
+				$parametrosEmail ['nombre'] = $empleado->txt_nombre;
+				
+				$parametrosEmail ['usuario'] = $empleado->txt_usuario;
+				
+				$parametrosEmail ['pass'] = $empleado->txt_password;
+				
+				$utils = new Utils();
+				$utils->sendEmailRecuperarPasswordEmpleado($recoveryPass->email,$parametrosEmail );
+				
+				return $this->render('mensajeExito');
+			}
+			
+		}
+		return $this->render('recoveryPassForm', ['recoveryPass'=>$recoveryPass]);
 	}
 }

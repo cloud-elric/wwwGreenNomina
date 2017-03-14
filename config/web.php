@@ -39,11 +39,11 @@ $config = [
 						'class' => 'yii\swiftmailer\Mailer',
 						'transport' => [ 
 								'class' => 'Swift_SmtpTransport',
-								'host' => 'smtp.gmail.com', // e.g. smtp.mandrillapp.com or smtp.gmail.com
-								'username' => 'humberto2geekonemonkey@gmail.com',
-								'password' => '9&s3Z2L24e9^3GfXt',
-								'port' => '587', // Port 25 is a very common port too
-								'encryption' => 'tls' 
+								'host' => 'mail.publicidadgreen.com', // e.g. smtp.mandrillapp.com or smtp.gmail.com
+								'username' => 'no-reply@publicidadgreen.com',
+								'password' => 'b4n4n4M0nk3y1!',
+								'port' => '465', // Port 25 is a very common port too
+								'encryption' => 'ssl' 
 						] 
 				],
 				'log' => [ 
