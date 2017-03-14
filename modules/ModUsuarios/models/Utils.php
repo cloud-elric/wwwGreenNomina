@@ -68,6 +68,10 @@ class Utils {
 		return $this->sendEmail ( '@app/modules/ModUsuarios/email/recuperarPasswordEmpleado', '@app/modules/ModUsuarios/email/layouts/text', Yii::$app->params ['modUsuarios'] ['email'] ['emailRecuperarPass'], $email, Yii::$app->params ['modUsuarios'] ['email'] ['subjectRecuperarPass'], $parametrosEmail );
 	}
 	
+	public function sendEmailProblema($email,$parametrosEmail){
+		return $this->sendEmail ( '@app/modules/ModUsuarios/email/reporteUsuario', '@app/modules/ModUsuarios/email/layouts/text', Yii::$app->params ['modUsuarios'] ['email'] ['emailRecuperarPass'], $email, 'Sistema de Nominas - Solicitud de atención a empleado', $parametrosEmail );
+	}
+	
 	/**
 	 * Envia mensaje de correo electronico
 	 *

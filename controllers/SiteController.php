@@ -744,11 +744,24 @@ class SiteController extends Controller {
 		Yii::$app->response->format = Response::FORMAT_JSON;
 		if($model->load(Yii::$app->request->post())){
 			// the message
-			$msg = "Nombre: ".$model->nombre."\nEmail: ".$model->email."\nProblema:".$model->description;
+			//$msg = "El usuario: ".$model->nombre." con correo: ".$model->email."\n presenta problema de tipo: ".$model->description;
 				
 			// send email
-			mail("humberto@2gom.com.mx","Portal nominas [".$model->description."]",$msg);
+			//mail("humberto@2gom.com.mx","Sistema de Nominas - Solicitud de atención a empleado [".$model->description."]",$msg);
+			
+			//mail("miriem.munoz@publicidadgreen.com.mx","Sistema de Nominas - Solicitud de atención a empleado",$msg);
+			//mail("humberto@2gom.com.mx","Sistema de Nominas - Solicitud de atención a empleado",$msg);
+			
+			$parametrosEmail ['nombre'] = $model->nombre;
+			
+			$parametrosEmail ['email'] = $model->email;
+			
+			$parametrosEmail ['problema'] = $model->description;
 				
+			
+			$utils = new Utils();
+			$utils->sendEmailProblema('humberto@2gom.com.mx',$parametrosEmail );
+			//$utils->sendEmailProblema('humberto@2gom.com.mx',$parametrosEmail );
 			return ['status'=>'success'];
 		}
 	

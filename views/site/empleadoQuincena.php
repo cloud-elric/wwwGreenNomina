@@ -63,17 +63,11 @@ $this->registerJsFile(
 							</div>
 							<h3 class="titulo1">Fijos</h3>
 							<div class="row contenedor-datos">
-								<div class="campos_formulario col-xs-12 col-sm-4 col-md-4">Dias</div>
-								<div class="campos_formulario col-xs-12 col-sm-4 col-md-4">Por día</div>
-								<div class="campos_formulario col-xs-12 col-sm-4 col-md-4">Subtotal:</div>
+								
+								
+							
 								<!--datos del input-->
-								<div class="col-xs-12 col-sm-4 col-md-4">
-									<div class="contenedor-valor"><?=$ultimoPago->num_dias_trabajados?></div>
-								</div>
-								<div class="col-xs-12 col-sm-4 col-md-4">
-									<div class="contenedor-valor"><?=round($ultimoPago->num_sueldo,2)?></div>
-								</div>
-								<div class="col-xs-12 col-sm-4 col-md-4">
+								<div class="col-xs-12 col-sm-4 col-md-4 col-md-offset-8">
 									<div class="contenedor-valor"><?=round($ultimoPago->num_total_sueldo_fijo, 2)?></div>
 								</div>
 							</div>
