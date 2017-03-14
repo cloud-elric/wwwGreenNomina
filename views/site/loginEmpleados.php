@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
+use yii\helpers\Html;
 ?>
 <div class="row">
 	<div class="col-md-4 col-md-offset-4">
@@ -33,10 +34,15 @@ $form3 = ActiveForm::begin ( [
         </div>
     <?php endif; ?>
 </div>
-		<div>
+		<div class="form-group">
 			<input type="submit" class="btn btn_primary" style="width: 100%">
 		</div>
 		<?php ActiveForm::end(); ?>
+		
+		<div
+			class="form-group text-center">
+			<?=Html::a('Recuperar contraseña', ['site/recovery-pass-form'])?>
+		</div>
 		</div>
 		</div>
 	</div>

@@ -14,6 +14,21 @@ $this->registerCssFile(
 		'@web/css/empleadoTicket.css',
 		['depends' => [\yii\web\JqueryAsset::className()]]
 		);
+
+$this->registerCssFile(
+		'@web/plugins/ladda/css/ladda.min.css',
+		['depends' => [\yii\web\JqueryAsset::className()]]
+		);
+
+$this->registerJsFile(
+		'@web/plugins/ladda/js/spin.min.js',
+		['depends' => [\yii\web\JqueryAsset::className()]]
+		);
+
+$this->registerJsFile(
+		'@web/plugins/ladda/js/ladda.min.js',
+		['depends' => [\yii\web\JqueryAsset::className()]]
+		);
 ?>
 
 
@@ -48,9 +63,8 @@ $this->registerCssFile(
 							</div>
 							<h3 class="titulo1">Fijos</h3>
 							<div class="row contenedor-datos">
-								<div class="campos_formulario col-xs-12 col-sm-4 col-md-4">Dias
-									trabajados</div>
-								<div class="campos_formulario col-xs-12 col-sm-4 col-md-4">Dias mensuales</div>
+								<div class="campos_formulario col-xs-12 col-sm-4 col-md-4">Dias</div>
+								<div class="campos_formulario col-xs-12 col-sm-4 col-md-4">Por día</div>
 								<div class="campos_formulario col-xs-12 col-sm-4 col-md-4">Subtotal:</div>
 								<!--datos del input-->
 								<div class="col-xs-12 col-sm-4 col-md-4">
@@ -156,3 +170,4 @@ $this->registerCssFile(
 
 </div>
 <!--fin de la fila row-->
+<?=$this->render('//site/contactUs');?>
