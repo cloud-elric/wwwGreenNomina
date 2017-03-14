@@ -1,6 +1,11 @@
 <?php 
 use app\models\ContactUs;
 use yii\bootstrap\ActiveForm;
+
+$this->registerJsFile(
+		'@web/js/contact-us.js',
+		['depends' => [\yii\web\JqueryAsset::className()]]
+		);
 ?>
 
  <style>
@@ -15,7 +20,7 @@ use yii\bootstrap\ActiveForm;
 </style>
 	<div class="col-md-3 col-md-offset-9 container-contact-us">
 		<button class="btn btn-default btn-block" data-toggle="modal"
-			data-target="#contact-us-modal">Contact us</button>
+			data-target="#contact-us-modal">Contáctanos</button>
 	</div>
 
 	<!-- Modal -->
@@ -28,7 +33,7 @@ use yii\bootstrap\ActiveForm;
 						aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
-					<h4 class="modal-title" id="myModalLabel">Contact us</h4>
+					<h4 class="modal-title" id="myModalLabel">Contáctanos</h4>
 				</div>
 					<?php
 					$contact = new ContactUs ();
@@ -40,22 +45,26 @@ use yii\bootstrap\ActiveForm;
 					<div class="container-fluid">
 						<div class="row">
 
-
+				<div class="form-group">
+      <?=$form->field($contact, 'nombre')->textInput(['class'=>'form-control'])->label('Nombre completo')?>
+      </div>
 
 							<div class="form-group">
       <?=$form->field($contact, 'email')->textInput(['class'=>'form-control'])?>
       </div>
 							<div class="form-group">
-      <?=$form->field($contact, 'description')->textarea(['class'=>'form-control'])->label('Have a problem ? Briefly describe the issue and we’ll get to you soon.')?>
+      <?=$form->field($contact, 'description')->dropDownList(['Mi total no coincide' => 'Mi total no coincide',  'Duda en descuentos' => 'Duda en descuentos','Duda fijos'=>'Duda fijos', 'Duda variables'=>'Duda variables'],['prompt'=>'Seleccionar problema','class'=>'form-control'])->label('¿Tienes un problema?')?>
       </div>
 
 						</div>
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button id="js-submit-contact-us" type="submit" class="btn btn-primary js-send-contact-us ladda-button" data-style='zoom-in'><span class="ladda-label">Contact us</span></button>
+					<button id="js-submit-contact-us" type="submit" class="btn btn-primary js-send-contact-us ladda-button" data-style='zoom-in'><span class="ladda-label">Contáctanos</span></button>
 				</div>
 				  <?php ActiveForm::end(); ?>
 			</div>
 		</div>
 	</div>
+	
+	

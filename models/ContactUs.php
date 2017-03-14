@@ -15,6 +15,7 @@ class ContactUs extends Model
 {
     public $email;
     public $description;
+    public $nombre;
 
 
     /**
@@ -24,7 +25,7 @@ class ContactUs extends Model
     {
         return [
             // username and password are both required
-            [['email', 'description'], 'required', 'message'=>'Campo requerido'],
+            [['email', 'description', 'nombre'], 'required', 'message'=>'Campo requerido'],
         		[
         		'email',
         		'trim'

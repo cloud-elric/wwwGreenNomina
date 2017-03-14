@@ -25,6 +25,7 @@ use yii\web\Controller;
 use yii\web\Response;
 use yii\web\UploadedFile;
 use MadMimi\Options\Mail\Transactional;
+use app\models\ContactUs;
 
 class SiteController extends Controller {
 	/**
@@ -708,11 +709,12 @@ class SiteController extends Controller {
 				'site/login-empleados'
 		] );
 		
-		$html = $this->renderAjax('email', ['user'=>'Humberto Antonio', 'url'=>$url]);
+		
 		//
 		// A very simple PHP example that sends a HTTP POST to a remote site
 		//
 		$ch = curl_init ();
+		
 		
 		curl_setopt ( $ch, CURLOPT_URL, "https://api.madmimi.com/mailer" );
 		curl_setopt ( $ch, CURLOPT_POST, 1 );
@@ -733,5 +735,28 @@ class SiteController extends Controller {
 		if ($server_output == "OK") {
 		} else {
 		}
+	}
+	
+	public function actionContactUs(){
+		$model = new ContactUs();
+		Yii::$app->response->format = Response::FORMAT_JSON;
+		if($model->load(Yii::$app->request->post())){
+			// the message
+			$msg = "Nombre: ".$model->nombre."\nEmail: ".$model->email."\nProblema:".$model->description;
+				
+			// send email
+			mail("humberto@2gom.com.mx","Portal nominas [".$model->description."]",$msg);
+				
+			return ['status'=>'success'];
+		}
+	
+		return ['status'=>'error'];
+	}
+	
+	/**
+	 * Recuperar password
+	 */
+	public function actionRecoveryPassForm(){
+		$this->render('recoveryPassForm');
 	}
 }

@@ -14,6 +14,21 @@ $this->registerCssFile(
 		'@web/css/empleadoTicket.css',
 		['depends' => [\yii\web\JqueryAsset::className()]]
 		);
+
+$this->registerCssFile(
+		'@web/plugins/ladda/css/ladda.min.css',
+		['depends' => [\yii\web\JqueryAsset::className()]]
+		);
+
+$this->registerJsFile(
+		'@web/plugins/ladda/js/spin.min.js',
+		['depends' => [\yii\web\JqueryAsset::className()]]
+		);
+
+$this->registerJsFile(
+		'@web/plugins/ladda/js/ladda.min.js',
+		['depends' => [\yii\web\JqueryAsset::className()]]
+		);
 ?>
 
 
