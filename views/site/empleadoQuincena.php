@@ -56,7 +56,7 @@ $this->registerJsFile(
 							<div class="row">
 								<center>
 									<h3 class="titulo">
-										Datos Empleado<img class="pequenia" src="<?=Url::base()?>/images/recibo.png" />
+										Datos<img class="pequenia" src="<?=Url::base()?>/images/recibo.png" />
 									</h3>
 								</center>
 
@@ -94,7 +94,7 @@ $this->registerJsFile(
 							
 							</div>
 
-							<h3>Menos</h3>
+							<h3>-</h3>
 
 							<div class="row contenedor-datos">
 							<?php
@@ -118,7 +118,7 @@ $this->registerJsFile(
 							</div>
 
 
-							<h3>Mas</h3>
+							<h3>+</h3>
 							<div class="row contenedor-datos">
 							
 							<?php

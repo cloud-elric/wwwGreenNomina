@@ -64,13 +64,13 @@ $this->params ['breadcrumbs'] [] = $this->title;
 						</div>
 						<div class="col-md-4">
 							<div class="col-md-6">
-								<strong>Tipo de contrato:</strong>
+								<strong>Tipo ejecutivo:</strong>
 							</div>
 							<div class="col-md-6"><?=$model->idTipoContrato->txt_nombre?></div>
 						</div>
 						<div class="col-md-4">
 							<div class="col-md-6">
-								<strong>Nomina:</strong>
+								<strong></strong>
 							</div>
 							<div class="col-md-6"><?=$model->idNomina->txt_nombre ?></div>
 						</div>
@@ -147,7 +147,7 @@ $this->params ['breadcrumbs'] [] = $this->title;
 	<div class="col-md-12">
 		<div class="panel panel-info">
 			<div class="panel-heading">
-				<h3>Historial de pagos</h3>
+				<h3>Historial $</h3>
 			</div>
 			<div class="panel-body">
 <?php \yii\widgets\Pjax::begin(); ?>

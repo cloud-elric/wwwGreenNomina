@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //     	var_dump($fch_correcta);
 //     	var_dump($arreglo);exit();
     ?>
-    <?=  $form->field($extras, 'id_nomina')->dropDownList(ArrayHelper::map($fch_correcta, 'id_pago_empleado', 'fch_pago')) ?>
+    <?=  $form->field($extras, 'id_nomina')->dropDownList(ArrayHelper::map($fch_correcta, 'id_pago_empleado', 'fch_pago'))->label('Fecha $') ?>
     
     <?= $form->field($extras, 'txt_concepto')->textInput(['maxlength' => true])?>
 	

@@ -19,7 +19,7 @@ $this->params ['breadcrumbs'] [] = ['label' => $empleado->txt_nombre,
 ?>
 <div class="panel">
 <div class="panel-body">
-<h2>Datos empleados</h2>
+<h2>Datos </h2>
 <table style="
     width: 100%;
 ">
@@ -27,7 +27,7 @@ $this->params ['breadcrumbs'] [] = ['label' => $empleado->txt_nombre,
 		<th>No. empleado</th>
 		<th>Nombre</th>
 		<th>Rfc</th>
-		<th>Seguro Social</th>
+		<th>NSS</th>
 		<th>Fecha de alta</th>
 		<th>Email</th>
 	</tr>
@@ -71,7 +71,7 @@ $totalNomina =0;
 $totalDeposito = 0;
 ?>
 
-<h2>Pago</h2>
+<h2>$</h2>
 
 <?php if($ultimoPago){
 	$totalNomina = round($ultimoPago->num_total_sueldo_fijo , 2);
@@ -81,9 +81,9 @@ $totalDeposito = 0;
     width: 100%;
 ">
 <tr>
-<th>Días trabajados</th>
-<th>Sueldo</th>
-<th>Total</th>
+<th>Dias</th>
+<th>Individual</th>
+<th>Original</th>
 </tr>
 <tr>
 <td><?=$ultimoPago->num_dias_trabajados?></td>
@@ -95,7 +95,7 @@ $totalDeposito = 0;
 	<?php 
 }?>
 
-<h2>Pagos extras</h2>
+<h2>Extras</h2>
 <table style="
     width: 100%;
 ">
@@ -124,7 +124,7 @@ if(count($extras) >= 1){
 <tr style="border-top:1px solid black"><td>Total variables</td><td><?=round($totalVariables,2)?></td></tr>
 </table>
 
-<h2>Deducciones</h2>
+<h2>-</h2>
 <table style="
     width: 100%;
 ">
@@ -152,7 +152,7 @@ if(count($extras) >= 1){
 </table>
 
 
-<h2>Depositos</h2>
+<h2>+</h2>
 <table style="
     width: 100%;
 ">
@@ -179,8 +179,8 @@ if(count($extras) >= 1){
 
 </table>
 
-<h2>Total pagado: <?=round($totalExtra+$totalNomina, 2)?></h2>
-<h2>Total depositado:<?=round($totalDeposito, 2)?></h2>
+<h2>Original: <?=round($totalExtra+$totalNomina, 2)?></h2>
+<h2>Total:<?=round($totalDeposito, 2)?></h2>
 <!-- <table style="
     width: 100%;
 ">

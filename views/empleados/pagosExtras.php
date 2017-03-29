@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
     'columns' => [
     	['class' => 'yii\grid\SerialColumn'],
         [
-        	'attribute' => 'fecha de pago',
+        	'attribute' => 'fecha de $',
         	'format' => 'raw',
         	'value' => function($data){
         		$data->fch_pago = Utils::changeFormatDate($data->fch_pago);
