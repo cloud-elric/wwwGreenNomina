@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\ArrayHelper;
+use app\models\CatSucursales;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\EntEmpleadosSearch */
@@ -19,7 +21,7 @@ use yii\widgets\ActiveForm;
 		<div class="col-md-6">
 		    <?= $form->field($model, 'txt_nombre') ?>
 		
-		    <?= $form->field($model, 'id_sucursal') ?>
+		    <?= $form->field($model, 'id_sucursal')->dropDownList(ArrayHelper::map(CatSucursales::find()->where('b_habilitado=1')->all(), 'id_sucursal', 'txt_nombre'), ['prompt'=>'Seleccionar sucursal'])?>
 
 			<?php // $form->field($model, 'id_tipo_contrato') ?>
 			

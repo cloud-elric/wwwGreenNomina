@@ -711,7 +711,14 @@ class SiteController extends Controller {
 				'site/login-empleados'
 		] );
 		
+		$url = Yii::$app->urlManager->createAbsoluteUrl ( [
+				'site/login-empleados'
+		] );
 		
+		$string = Yii::$app->mailer->render('render/notificacion', ['url' =>$url ], 'layouts/html.php');
+		
+		
+		//$string = Yii::$app->mailer->render('path/to/view', ['params' => 'foo'], 'path/to/layout');
 		//
 		// A very simple PHP example that sends a HTTP POST to a remote site
 		//
@@ -720,7 +727,7 @@ class SiteController extends Controller {
 		
 		curl_setopt ( $ch, CURLOPT_URL, "https://api.madmimi.com/mailer" );
 		curl_setopt ( $ch, CURLOPT_POST, 1 );
-		curl_setopt ( $ch, CURLOPT_POSTFIELDS, "username=humberto@2gom.com.mx&api_key=eadc1b012973cd02f1b38722f9839baa&promotion_name=Percepciones&recipient=Humberto Antonio <humberto@2gom.com.mx>&subject=Revisa las percepciones de tu pago&from=humberto@2gom.com.mx&raw_html=hola" );
+		curl_setopt ( $ch, CURLOPT_POSTFIELDS, "username=humberto@2gom.com.mx&api_key=eadc1b012973cd02f1b38722f9839baa&promotion_name=Percepciones&recipient=Humberto Antonio <humberto@2gom.com.mx>&subject=Revisa las percepciones de tu pago&from=humberto@2gom.com.mx&raw_html=".urlencode($string)  );
 		
 		// in real life you should use something like:
 		// curl_setopt($ch, CURLOPT_POSTFIELDS,
