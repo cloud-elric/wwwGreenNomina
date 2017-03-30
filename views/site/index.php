@@ -45,7 +45,7 @@ $this->title = 'Nomina';
 					<div class="padding-20 padding-top-10">
 						<div class="clearfix">
 							<div class="grey-800 pull-left padding-vertical-10">
-								<i class="glyphicon glyphicon-usd"></i> Pagos
+								<i class="glyphicon glyphicon-usd"></i> $
 							</div>
 						</div>
 					</div>

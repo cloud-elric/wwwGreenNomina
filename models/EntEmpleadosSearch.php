@@ -86,7 +86,7 @@ class EntEmpleadosSearch extends EntEmpleados
      */
     public function searchPagos($params, $fecha)
     {
-    	$fecha= Utils::changeFormatDateInput($fecha);
+    	$fecha= Utils::changeFormatDateInputShort($fecha);
     	$query = EntEmpleados::find()->where(['b_habilitado'=>1]);
     
     	// add conditions that should always apply here
@@ -120,7 +120,7 @@ class EntEmpleadosSearch extends EntEmpleados
     	->andFilterWhere(['like', 'txt_rfc', $this->txt_rfc])
     	->andFilterWhere(['like', 'num_seguro_social', $this->num_seguro_social])
     	->joinWith('wrkPagosEmpleados')
-    	->andFilterWhere(['fch_pago'=>$fecha]);
+    	->andFilterWhere(['like', 'fch_pago', $fecha]);
     
     	return $dataProvider;
     }

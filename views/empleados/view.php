@@ -40,19 +40,19 @@ $this->params ['breadcrumbs'] [] = $this->title;
 							<div class="col-md-6">
 								<strong># empleado:</strong>
 							</div>
-							<div class="col-md-6"><?=$model->num_empleado?></div>
+							<div class="col-md-6"><span><?=$model->num_empleado?></span></div>
 						</div>
 						<div class="col-md-4">
 							<div class="col-md-6">
 								<strong>RFC:</strong>
 							</div>
-							<div class="col-md-6"><?=$model->txt_rfc?></div>
+							<div class="col-md-6"><span><?=$model->txt_rfc?></span></div>
 						</div>
 						<div class="col-md-4">
 							<div class="col-md-6">
 								<strong>NSS:</strong>
 							</div>
-							<div class="col-md-6"><?=$model->num_seguro_social?></div>
+							<div class="col-md-6"><span><?=$model->num_seguro_social?></span></div>
 						</div>
 					</div>
 					<div class="row">
@@ -60,19 +60,19 @@ $this->params ['breadcrumbs'] [] = $this->title;
 							<div class="col-md-6">
 								<strong>Sucursal:</strong>
 							</div>
-							<div class="col-md-6"><?=$model->idSucursal->txt_nombre?></div>
+							<div class="col-md-6"><span><?=$model->idSucursal->txt_nombre?></span></div>
 						</div>
 						<div class="col-md-4">
 							<div class="col-md-6">
 								<strong>Tipo ejecutivo:</strong>
 							</div>
-							<div class="col-md-6"><?=$model->idTipoContrato->txt_nombre?></div>
+							<div class="col-md-6"><span><?=$model->idTipoContrato->txt_nombre?></span></div>
 						</div>
 						<div class="col-md-4">
 							<div class="col-md-6">
 								<strong></strong>
 							</div>
-							<div class="col-md-6"><?=$model->idNomina->txt_nombre ?></div>
+							<div class="col-md-6"><span><?=$model->idNomina->txt_nombre ?></span></div>
 						</div>
 					</div>
 					<div class="row">
@@ -80,19 +80,19 @@ $this->params ['breadcrumbs'] [] = $this->title;
 							<div class="col-md-6">
 								<strong>Banco:</strong>
 							</div>
-							<div class="col-md-6"><?=$model->entDatosBancarios->idBanco->txt_nombre?></div>
+							<div class="col-md-6"><span><?=$model->entDatosBancarios->idBanco->txt_nombre?></span></div>
 						</div>
 						<div class="col-md-4">
 							<div class="col-md-6">
 								<strong>Cuenta:</strong>
 							</div>
-							<div class="col-md-6"><?=$model->entDatosBancarios->txt_numero_cuenta?></div>
+							<div class="col-md-6"><span><?=$model->entDatosBancarios->txt_numero_cuenta?></span></div>
 						</div>
 						<div class="col-md-4">
 							<div class="col-md-6">
 								<strong>Clabe:</strong>
 							</div>
-							<div class="col-md-6"><?=$model->entDatosBancarios->txt_clabe?></div>
+							<div class="col-md-6"><span><?=$model->entDatosBancarios->txt_clabe?></span></div>
 						</div>
 					</div>
 					<div class="row">
@@ -100,20 +100,20 @@ $this->params ['breadcrumbs'] [] = $this->title;
 							<div class="col-md-6">
 								<strong>Usuario:</strong>
 							</div>
-							<div class="col-md-6"><?=$model->txt_usuario?></div>
+							<div class="col-md-6"><span><?=$model->txt_usuario?></span></div>
 						</div>
 						<div class="col-md-4">
 							<div class="col-md-6">
 								<strong>Password:</strong>
 							</div>
-							<div class="col-md-6"><?=$model->txt_password?></div>
+							<div class="col-md-6"><span><?=$model->txt_password?></span></div>
 						</div>
 						<div class="col-md-4">
 							<div class="col-md-6">
 								<strong>Fecha alta:</strong>
 							</div>
 							<?php  $model->fch_alta = Utils::changeFormatDate($model->fch_alta)?>
-							<div class="col-md-6"><?=$model->fch_alta?></div>
+							<div class="col-md-6"><span><?=$model->fch_alta?></span></div>
 						</div>
 					</div>
 
@@ -123,19 +123,19 @@ $this->params ['breadcrumbs'] [] = $this->title;
 							<div class="col-md-6">
 								<strong>Telefono:</strong>
 							</div>
-							<div class="col-md-6"><?=$model->entEmpleadosContactos->txt_telefono_contacto ?></div>
+							<div class="col-md-6"><span><?=$model->entEmpleadosContactos->txt_telefono_contacto ?></span></div>
 						</div>
 						<div class="col-md-4">
 							<div class="col-md-6">
 								<strong>Email:</strong>
 							</div>
-							<div class="col-md-6"><?=$model->entEmpleadosContactos->txt_mail_contacto ?></div>
+							<div class="col-md-6"><span><?=$model->entEmpleadosContactos->txt_mail_contacto ?></span></div>
 						</div>
 						<div class="col-md-4">
 							<div class="col-md-6">
 								<strong>Observaciones:</strong>
 							</div>
-							<div class="col-md-6"><?=$model->txt_observaciones?></div>
+							<div class="col-md-6"><span><?=$model->txt_observaciones?></span></div>
 						</div>
 					</div>
 				</div>

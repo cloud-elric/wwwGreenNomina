@@ -707,9 +707,6 @@ class SiteController extends Controller {
 	 */
 	public function actionEnviarEmailApi() {
 		
-		$url = Yii::$app->urlManager->createAbsoluteUrl ( [
-				'site/login-empleados'
-		] );
 		
 		$url = Yii::$app->urlManager->createAbsoluteUrl ( [
 				'site/login-empleados'
