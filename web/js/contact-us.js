@@ -24,6 +24,7 @@ $(document).ready(function(){
 					$('#contact-us-modal').modal('hide');
 					document.getElementById("form-contact-us").reset();
 					l.stop();
+					swal("", "Muchas gracias por tu reporte, en breve un asesor se pondrá en contacto a través de tu correo electrónico.", "success")
 				},error:function(){
 					l.stop();
 				}
