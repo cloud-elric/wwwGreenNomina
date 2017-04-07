@@ -2,26 +2,31 @@
 
 namespace app\controllers;
 
-use Yii;
-use yii\filters\AccessControl;
-use yii\web\Controller;
-use yii\filters\VerbFilter;
-use app\models\LoginForm;
-use app\models\ContactForm;
-use yii\web\Response;
-use yii\web\UploadedFile;
-use app\models\EntEmpleados;
-use app\models\ViewEmpleadoCompleto;
-use app\models\WrkDeduccionesEmpleado;
-use app\models\WrkPagosExtras;
 use app\models\CatBancos;
 use app\models\CatNominas;
 use app\models\CatSucursales;
 use app\models\CatTiposContratos;
-use app\models\EntEmpleadosContactos;
+use app\models\ContactForm;
 use app\models\EntDatosBancarios;
+use app\models\EntEmpleados;
+use app\models\EntEmpleadosContactos;
+use app\models\LoginForm;
+use app\models\WrkDeduccionesEmpleado;
 use app\models\WrkPagosEmpleados;
+use app\models\WrkPagosExtras;
 use app\modules\ModUsuarios\models\Utils;
+use MadMimi\Connection;
+use MadMimi\CurlRequest;
+use MadMimi\Options\Mail\MailingList;
+use Yii;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
+use yii\web\Controller;
+use yii\web\Response;
+use yii\web\UploadedFile;
+use MadMimi\Options\Mail\Transactional;
+use app\models\ContactUs;
+use app\models\RecoveryPass;
 
 class SiteController extends Controller {
 	/**
@@ -32,12 +37,18 @@ class SiteController extends Controller {
 				'access' => [ 
 						'class' => AccessControl::className (),
 						'only' => [ 
-								'logout', 'index','empleado-quincena', 'subir-archivo', 'upload-file' 
+								'logout',
+								'index',
+								'subir-archivo',
+								'upload-file' 
 						],
 						'rules' => [ 
 								[ 
 										'actions' => [ 
-												'logout','index','empleado-quincena', 'subir-archivo', 'upload-file' 
+												'logout',
+												'index',
+												'subir-archivo',
+												'upload-file' 
 										],
 										'allow' => true,
 										'roles' => [ 
@@ -91,7 +102,7 @@ class SiteController extends Controller {
 			return $this->goHome ();
 		}
 		
-		$model = new LoginForm ();
+		$model = new LoginForm();
 		if ($model->load ( Yii::$app->request->post () ) && $model->login ()) {
 			return $this->goBack ();
 		}
@@ -109,6 +120,13 @@ class SiteController extends Controller {
 		Yii::$app->user->logout ();
 		
 		return $this->goHome ();
+	}
+	public function actionLogoutEmpleado() {
+		Yii::$app->user->logout ();
+		
+		return $this->redirect ( [ 
+				'site/login-empleados' 
+		] );
 	}
 	
 	/**
@@ -179,16 +197,17 @@ class SiteController extends Controller {
 			'num_facturacion' => 21,
 			'fch_pago' => 40 
 	];
-	
-	public $columnasPagosExtras = [
-		'extra1'=>23,
-		'extra2'=>26,
-		'extra3'=>29
+	public $columnasPagosExtras = [ 
+			'extra1' => 22,
+			'extra2' => 25,
+			'extra3' => 28,
+			'extra4' => 30,
+			'extra5' => 32,
+			//'extra6' => 35 
 	];
-	
-	public $columnasDeducciones = [
-			'deduccion1'=>41,
-			'deduccion2'=>42
+	public $columnasDeducciones = [ 
+			'deduccion1' => 41,
+			'deduccion2' => 42 
 	];
 	
 	/**
@@ -230,11 +249,17 @@ class SiteController extends Controller {
 				$sucursales = $this->loadSucursales ( $objWorksheet, $row );
 				$tiposContratos = $this->loadTipoContrato ( $objWorksheet, $row );
 				$empleado = $this->loadEmpleados ( $objWorksheet, $row, $sucursales->id_sucursal, $tiposContratos->id_tipo_contrato, $nomina->id_nomina );
-				$datosBancario = $this->loadDatosBancarios ( $objWorksheet, $row, $empleado->id_empleado, $banco->id_banco );
-				$contacto = $this->loadEmpleadosContactos ( $objWorksheet, $row, $empleado->id_empleado );
-				$pago = $this->loadPago ( $objWorksheet, $row, $empleado->id_empleado, $banco->id_banco, $sucursales->id_sucursal, $tiposContratos->id_tipo_contrato, $nomina->id_nomina );
-				$this->loadPagosExtras($objWorksheet, $row, $empleado->id_empleado, $pago->id_pago_empleado);
-				$this->loadDeducciones($objWorksheet, $row, $empleado->id_empleado, $pago->id_pago_empleado);
+				if (! $empleado->errors) {
+					
+					$datosBancario = $this->loadDatosBancarios ( $objWorksheet, $row, $empleado->id_empleado, $banco->id_banco );
+					$contacto = $this->loadEmpleadosContactos ( $objWorksheet, $row, $empleado->id_empleado );
+					$pago = $this->loadPago ( $objWorksheet, $row, $empleado->id_empleado, $banco->id_banco, $sucursales->id_sucursal, $tiposContratos->id_tipo_contrato, $nomina->id_nomina );
+					$this->loadPagosExtras ( $objWorksheet, $row, $empleado->id_empleado, $pago->id_pago_empleado );
+					$this->loadDeducciones ( $objWorksheet, $row, $empleado->id_empleado, $pago->id_pago_empleado );
+				} else {
+					echo $row;
+					// print_r($empleado->errors);
+				}
 			}
 			echo '';
 		}
@@ -347,7 +372,8 @@ class SiteController extends Controller {
 		
 		if (\PHPExcel_Shared_Date::isDateTime ( $objWorksheet->getCellByColumnAndRow ( $this->columnasEmpleado ['fch_alta'], $row ) )) {
 			$InvDate = $objWorksheet->getCellByColumnAndRow ( $this->columnasEmpleado ['fch_alta'], $row )->getValue ();
-			$fchAlta = date ( "Y-m-d H:i:s", \PHPExcel_Shared_Date::ExcelToPHP ( $InvDate ) );
+			$fchAlta = $this->datefix_excel ( $InvDate );
+			// $fchAlta = date ( "Y-m-d H:i:s", \PHPExcel_Shared_Date::ExcelToPHP ( $InvDate ) );
 		} else {
 			
 			$fchAlta = null;
@@ -355,7 +381,8 @@ class SiteController extends Controller {
 		
 		if (\PHPExcel_Shared_Date::isDateTime ( $objWorksheet->getCellByColumnAndRow ( $this->columnasEmpleado ['fch_baja'], $row ) )) {
 			$InvDate = $objWorksheet->getCellByColumnAndRow ( $this->columnasEmpleado ['fch_baja'], $row )->getValue ();
-			$fchBaja = date ( "Y-m-d H:i:s", \PHPExcel_Shared_Date::ExcelToPHP ( $InvDate ) );
+			$fchBaja = $this->datefix_excel ( $InvDate );
+			// $fchBaja = date ( "Y-m-d H:i:s", \PHPExcel_Shared_Date::ExcelToPHP ( $InvDate ) );
 		} else {
 			
 			$fchBaja = null;
@@ -368,8 +395,8 @@ class SiteController extends Controller {
 		
 		if (empty ( $empleado )) {
 			$empleado = new EntEmpleados ();
-			$empleado->txt_usuario = $this->random_username($nombreEmpleado);
-			$empleado->txt_password = $this->randomPassword();
+			$empleado->txt_usuario = $this->random_username ( $nombreEmpleado );
+			$empleado->txt_password = $this->randomPassword ();
 		}
 		
 		$empleado->id_sucursal = $idSucursal;
@@ -395,16 +422,16 @@ class SiteController extends Controller {
 		$username = trim ( $firstPart ) . trim ( $secondPart ) . trim ( $nrRand );
 		return $username;
 	}
-	
 	public function randomPassword() {
-		$alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
-		$pass = array(); //remember to declare $pass as an array
-		$alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
-		for ($i = 0; $i < 8; $i++) {
-			$n = rand(0, $alphaLength);
-			$pass[] = $alphabet[$n];
+		#$alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+		$alphabet = 'abcdefghijklmnopqrstuvwxyz';
+		$pass = array (); // remember to declare $pass as an array
+		$alphaLength = strlen ( $alphabet ) - 1; // put the length -1 in cache
+		for($i = 0; $i < 8; $i ++) {
+			$n = rand ( 0, $alphaLength );
+			$pass [] = $alphabet [$n];
 		}
-		return implode($pass); //turn the array into a string
+		return implode ( $pass ); // turn the array into a string
 	}
 	
 	/**
@@ -460,66 +487,87 @@ class SiteController extends Controller {
 		
 		return $contacto;
 	}
-	
 	public function loadPagosExtras($objWorksheet, $row, $idEmpleado, $idPago) {
-		
-		$pagosExtras = WrkPagosExtras::deleteAll(['id_empleado'=>$idEmpleado, 'id_nomina'=>$idPago]);
+		$pagosExtras = WrkPagosExtras::deleteAll ( [ 
+				'id_empleado' => $idEmpleado,
+				'id_nomina' => $idPago 
+		] );
 		
 		$pago1 = $objWorksheet->getCellByColumnAndRow ( $this->columnasPagosExtras ['extra1'], $row )->getCalculatedValue ();
 		$pago2 = $objWorksheet->getCellByColumnAndRow ( $this->columnasPagosExtras ['extra2'], $row )->getCalculatedValue ();
-		$pago3 =$objWorksheet->getCellByColumnAndRow ( $this->columnasPagosExtras ['extra3'], $row )->getCalculatedValue ();
+		$pago3 = $objWorksheet->getCellByColumnAndRow ( $this->columnasPagosExtras ['extra3'], $row )->getCalculatedValue ();
+		$pago4 = $objWorksheet->getCellByColumnAndRow ( $this->columnasPagosExtras ['extra4'], $row )->getCalculatedValue ();
+		$pago5 = $objWorksheet->getCellByColumnAndRow ( $this->columnasPagosExtras ['extra5'], $row )->getCalculatedValue ();
 		
-		$pagoExtra = new WrkPagosExtras();
-		$pagoExtra2 = new WrkPagosExtras();
-		$pagoExtra3 = new WrkPagosExtras();
+		$pagoExtra = new WrkPagosExtras ();
+		$pagoExtra2 = new WrkPagosExtras ();
+		$pagoExtra3 = new WrkPagosExtras ();
+		$pagoExtra4 = new WrkPagosExtras ();
+		$pagoExtra5 = new WrkPagosExtras ();
 		
 		$pagoExtra->id_empleado = $idEmpleado;
 		$pagoExtra->id_nomina = $idPago;
-		$pagoExtra->txt_concepto = 'Venta playa';
+		$pagoExtra->txt_concepto = 'Playa';
 		$pagoExtra->num_monto = $pago1;
 		$pagoExtra->b_deposito = 0;
-		$pagoExtra->save();
+		$pagoExtra->save ();
+		
 		
 		$pagoExtra2->id_empleado = $idEmpleado;
 		$pagoExtra2->id_nomina = $idPago;
 		$pagoExtra2->txt_concepto = 'Minivacs';
 		$pagoExtra2->num_monto = $pago2;
 		$pagoExtra2->b_deposito = 0;
-		$pagoExtra2->save();
+		$pagoExtra2->save ();
+		
 		
 		$pagoExtra3->id_empleado = $idEmpleado;
 		$pagoExtra3->id_nomina = $idPago;
-		$pagoExtra3->txt_concepto = 'Cita';
+		$pagoExtra3->txt_concepto = 'Citas';
 		$pagoExtra3->num_monto = $pago3;
 		$pagoExtra3->b_deposito = 0;
-		$pagoExtra3->save();
-	
+		$pagoExtra3->save ();
+		
+		
+		$pagoExtra4->id_empleado = $idEmpleado;
+		$pagoExtra4->id_nomina = $idPago;
+		$pagoExtra4->txt_concepto = 'Salas';
+		$pagoExtra4->num_monto = $pago4;
+		$pagoExtra4->b_deposito = 0;
+		$pagoExtra4->save ();
+		
+		
+		$pagoExtra5->id_empleado = $idEmpleado;
+		$pagoExtra5->id_nomina = $idPago;
+		$pagoExtra5->txt_concepto = 'Datos';
+		$pagoExtra5->num_monto = $pago5;
+		$pagoExtra5->b_deposito = 0;
+		$pagoExtra5->save ();
 		
 	}
-	
 	public function loadDeducciones($objWorksheet, $row, $idEmpleado, $idPago) {
-	
-		$pagosExtras = WrkDeduccionesEmpleado::deleteAll(['id_empleado'=>$idEmpleado, 'id_nomina'=>$idPago]);
-	
-		$deduccionPago1 = $objWorksheet->getCellByColumnAndRow ( $this->columnasDeducciones ['deduccion1'], $row )->getCalculatedValue ();
-		$deduccionPago2 = $objWorksheet->getCellByColumnAndRow ( $this->columnasDeducciones['deduccion2'], $row )->getCalculatedValue ();
-	
+		$pagosExtras = WrkDeduccionesEmpleado::deleteAll ( [ 
+				'id_empleado' => $idEmpleado,
+				'id_nomina' => $idPago 
+		] );
 		
-		$deduccion1 = new WrkDeduccionesEmpleado();
-		$deduccion2 = new WrkDeduccionesEmpleado();
-	
+		$deduccionPago1 = $objWorksheet->getCellByColumnAndRow ( $this->columnasDeducciones ['deduccion1'], $row )->getCalculatedValue ();
+		$deduccionPago2 = $objWorksheet->getCellByColumnAndRow ( $this->columnasDeducciones ['deduccion2'], $row )->getCalculatedValue ();
+		
+		$deduccion1 = new WrkDeduccionesEmpleado ();
+		$deduccion2 = new WrkDeduccionesEmpleado ();
+		
 		$deduccion1->id_empleado = $idEmpleado;
 		$deduccion1->id_nomina = $idPago;
-		$deduccion1->txt_concepto = 'Deducción 1';
-		$deduccion1->num_monto = doubleval($deduccionPago1);
-		$deduccion1->save();
+		$deduccion1->txt_concepto = 'M1';
+		$deduccion1->num_monto = doubleval ( $deduccionPago1 );
+		$deduccion1->save ();
 		
 		$deduccion2->id_empleado = $idEmpleado;
 		$deduccion2->id_nomina = $idPago;
-		$deduccion2->txt_concepto = 'Deducción 2';
-		$deduccion2->num_monto = doubleval($deduccionPago2);
-		$deduccion2->save();
-	
+		$deduccion2->txt_concepto = 'M2';
+		$deduccion2->num_monto = doubleval ( $deduccionPago2 );
+		$deduccion2->save ();
 	}
 	
 	/**
@@ -541,8 +589,11 @@ class SiteController extends Controller {
 		$fechaPago = $objWorksheet->getCellByColumnAndRow ( $this->columnasPago ['fch_pago'], $row )->getCalculatedValue ();
 		
 		if (\PHPExcel_Shared_Date::isDateTime ( $objWorksheet->getCellByColumnAndRow ( $this->columnasPago ['fch_pago'], $row ) )) {
+			
 			$InvDate = $objWorksheet->getCellByColumnAndRow ( $this->columnasPago ['fch_pago'], $row )->getValue ();
-			$fechaPago = date ( "Y-m-d", \PHPExcel_Shared_Date::ExcelToPHP ( $InvDate ) );
+			$fechaPago = $this->datefix_excel ( $InvDate );
+			
+			// $fechaPago = date ( "Y-m-d", \PHPExcel_Shared_Date::ExcelToPHP ( $InvDate ) );
 		} else {
 			
 			$fechaPago = Utils::getFechaActual ();
@@ -570,71 +621,193 @@ class SiteController extends Controller {
 		$ultimoPago->save ();
 		return $ultimoPago;
 	}
+	public function datefix_excel($excel) {
+		$dif = (41885 - $excel) * 86400;
+		$seconds = 1409737670 - $dif;
+		$date = date ( "Y-m-d", $seconds );
+		return $date;
+	}
 	public function actionEmpleadoQuincena() {
 		$this->enableCsrfValidation = false;
-		
+		$this->layout = 'mainEmpleado';
 		$session = Yii::$app->session;
 		$usu = null;
 		$pass = null;
 		
-		
-		
-			if($sesionEmpleado = $session->get ( 'empleado')){
-				$usu = $sesionEmpleado->txt_usuario;
-				$pass = $sesionEmpleado->txt_password;
-			}else if(isset($_POST ['usu']) && $_POST ['pass']){
-				$usu = $_POST ['usu'];
-				$pass = $_POST['pass'];
-			}
-			
-		
+		if ($sesionEmpleado = $session->get ( 'empleado' )) {
+			$usu = $sesionEmpleado->txt_usuario;
+			$pass = $sesionEmpleado->txt_password;
+		} else if (isset ( $_POST ['usu'] ) && $_POST ['pass']) {
+			$usu = $_POST ['usu'];
+			$pass = $_POST ['pass'];
+		}
 		
 		$empleado = $session->get ( 'empleado' );
-		
 		
 		// echo $usu;
 		// echo $pass;
 		// exit();
 		
-		$emp = EntEmpleados::find ()->where ( [ 
-				'txt_usuario' =>  $usu
+		$empleado = EntEmpleados::find ()->where ( [ 
+				'txt_usuario' => $usu 
 		] )->andWhere ( [ 
-				'txt_password' => $pass
+				'txt_password' => $pass 
 		] )->one ();
 		
-		if(empty($emp)){
-			
-			return $this->redirect(['login-empleados']);
+		if (empty ( $empleado )) {
+			Yii::$app->session->setFlash ( 'error', 'Usuario y/o contraseña incorrecto' );
+			return $this->redirect ( [ 
+					'login-empleados' 
+			] );
 		}
 		
-		$session->set ( 'empleado', $emp);
+		$session->set ( 'empleado', $empleado );
 		
+		$ultimoPago = WrkPagosEmpleados::find ()->where ( [ 
+				'id_empleado' => $empleado->id_empleado 
+		] )->orderBy ( 'fch_pago DESC' )->one ();
 		
-		$empleado = ViewEmpleadoCompleto::find ()->where ( [ 
-				'id_empleado' => $emp->id_empleado, 
-		] )->all ();
 		$deducciones = WrkDeduccionesEmpleado::find ()->where ( [ 
-				'id_empleado' => $emp->id_empleado 
+				'id_empleado' => $empleado->id_empleado,
+				'id_nomina' => $ultimoPago->id_pago_empleado 
 		] )->all ();
 		$extras = WrkPagosExtras::find ()->where ( [ 
-				'id_empleado' => $emp->id_empleado,
-				'b_deposito'=>0
+				'id_empleado' => $empleado->id_empleado,
+				'id_nomina' => $ultimoPago->id_pago_empleado,
+				'b_deposito' => 0 
 		] )->all ();
 		
-		$ultimoPago = WrkPagosEmpleados::find()->where(['id_empleado'=>$emp->id_empleado])->orderBy('fch_pago DESC')->one();
+		$depositos = WrkPagosExtras::find ()->where ( [ 
+				'id_empleado' => $empleado->id_empleado,
+				'id_nomina' => $ultimoPago->id_pago_empleado,
+				'b_deposito' => 1 
+		] )->all ();
 		
 		return $this->render ( 'empleadoQuincena', [ 
 				'empleado' => $empleado,
 				'deducciones' => $deducciones,
-				'extras' => $extras ,
-				'ultimoPago'=>$ultimoPago
+				'extras' => $extras,
+				'ultimoPago' => $ultimoPago,
+				'depositos' => $depositos 
 		] );
-		
 	}
 	public function actionLoginEmpleados() {
 		$session = Yii::$app->session;
+		$this->layout = 'mainEmpleado';
 		$session->set ( 'empleado', [ ] );
 		
 		return $this->render ( 'loginEmpleados' );
+	}
+	public function actionGenerarPass() {
+		echo Yii::$app->security->generatePasswordHash ( '98765432' );
+	}
+	
+	/**
+	 * Envia por medio de mad mimi un correo
+	 */
+	public function actionEnviarEmailApi() {
+		
+		$url = Yii::$app->urlManager->createAbsoluteUrl ( [
+				'site/login-empleados'
+		] );
+		
+		$url = Yii::$app->urlManager->createAbsoluteUrl ( [
+				'site/login-empleados'
+		] );
+		
+		$string = Yii::$app->mailer->render('render/notificacion', ['url' =>$url ], 'layouts/html.php');
+		
+		
+		//$string = Yii::$app->mailer->render('path/to/view', ['params' => 'foo'], 'path/to/layout');
+		//
+		// A very simple PHP example that sends a HTTP POST to a remote site
+		//
+		$ch = curl_init ();
+		
+		
+		curl_setopt ( $ch, CURLOPT_URL, "https://api.madmimi.com/mailer" );
+		curl_setopt ( $ch, CURLOPT_POST, 1 );
+		curl_setopt ( $ch, CURLOPT_POSTFIELDS, "username=humberto@2gom.com.mx&api_key=eadc1b012973cd02f1b38722f9839baa&promotion_name=Percepciones&recipient=Humberto Antonio <humberto@2gom.com.mx>&subject=Revisa las percepciones de tu pago&from=humberto@2gom.com.mx&raw_html=".urlencode($string)  );
+		
+		// in real life you should use something like:
+		// curl_setopt($ch, CURLOPT_POSTFIELDS,
+		// http_build_query(array('postvar1' => 'value1')));
+		
+		// receive server response ...
+		curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+		
+		$server_output = curl_exec ( $ch );
+		
+		curl_close ( $ch );
+		echo $server_output;
+		// further processing ....
+		if ($server_output == "OK") {
+		} else {
+		}
+	}
+	
+	public function actionContactUs(){
+		$model = new ContactUs();
+		Yii::$app->response->format = Response::FORMAT_JSON;
+		if($model->load(Yii::$app->request->post())){
+			// the message
+			//$msg = "El usuario: ".$model->nombre." con correo: ".$model->email."\n presenta problema de tipo: ".$model->description;
+				
+			// send email
+			//mail("humberto@2gom.com.mx","Sistema de Nominas - Solicitud de atención a empleado [".$model->description."]",$msg);
+			
+			//mail("miriem.munoz@publicidadgreen.com.mx","Sistema de Nominas - Solicitud de atención a empleado",$msg);
+			//mail("humberto@2gom.com.mx","Sistema de Nominas - Solicitud de atención a empleado",$msg);
+			
+			$parametrosEmail ['nombre'] = $model->nombre;
+			
+			$parametrosEmail ['email'] = $model->email;
+			
+			$parametrosEmail ['problema'] = $model->description;
+				
+			
+			$utils = new Utils();
+			$utils->sendEmailProblema('humberto@2gom.com.mx',$parametrosEmail );
+			//$utils->sendEmailProblema('humberto@2gom.com.mx',$parametrosEmail );
+			return ['status'=>'success'];
+		}
+	
+		return ['status'=>'error'];
+	}
+	
+	/**
+	 * Recuperar password
+	 */
+	public function actionRecoveryPassForm(){
+		
+		$this->layout = 'mainEmpleado';
+		
+		$recoveryPass = new RecoveryPass();
+		if($recoveryPass->load(Yii::$app->request->post())){
+			
+			//return $this->render('mensajeExito');
+			if($recoveryPass->validate()){
+				
+				$usuarioContacto = EntEmpleadosContactos::find()->where(['txt_mail_contacto'=>$recoveryPass->email])->one();
+				$empleado = $usuarioContacto->idEmpleado;
+				
+				$parametrosEmail ['url'] = Yii::$app->urlManager->createAbsoluteUrl ( [
+						'login'
+				] );
+				
+				$parametrosEmail ['nombre'] = $empleado->txt_nombre;
+				
+				$parametrosEmail ['usuario'] = $empleado->txt_usuario;
+				
+				$parametrosEmail ['pass'] = $empleado->txt_password;
+				
+				$utils = new Utils();
+				$utils->sendEmailRecuperarPasswordEmpleado($recoveryPass->email,$parametrosEmail );
+				
+				return $this->render('mensajeExito');
+			}
+			
+		}
+		return $this->render('recoveryPassForm', ['recoveryPass'=>$recoveryPass]);
 	}
 }

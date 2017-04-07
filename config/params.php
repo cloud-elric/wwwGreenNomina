@@ -19,9 +19,9 @@ return [
 				],
 				'mandarCorreoActivacion' => true, // Envia correo electronico para activar la cuenta del usuario
 				'email' => [
-						'emailActivacion' => 'welcome@2gom.com.mx',
+						'emailActivacion' => 'no-reply@publicidadgreen.com',
 						'subjectActivacion' => 'Activar cuenta',
-						'emailRecuperarPass' => 'support@2gom.com.mx',
+						'emailRecuperarPass' => 'no-reply@publicidadgreen.com',
 						'subjectRecuperarPass' => 'Recuperar contraseña'
 				],
 				'recueperarPass' => [

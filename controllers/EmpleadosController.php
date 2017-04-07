@@ -16,6 +16,7 @@ use app\models\WrkPagosExtras;
 use yii\filters\AccessControl;
 use app\models\Utils;
 use app\models\ViewPagos;
+use app\models\WrkDeduccionesEmpleado;
 
 /**
  * EmpleadosController implements the CRUD actions for EntEmpleados model.
@@ -220,8 +221,12 @@ class EmpleadosController extends Controller {
 				'query' => $pagos 
 		] );
 		
+		$empleado = EntEmpleados::find()->where([
+				'id_empleado'=>$id
+		])->one();
 		return $this->render ( 'pagosExtras', [ 
-				'dataProvider' => $dataProvider 
+				'dataProvider' => $dataProvider,
+				'empleado'=>$empleado
 		] );
 	}
 	public function actionAgregarPago($id, $idPago) {
@@ -318,9 +323,43 @@ class EmpleadosController extends Controller {
 		$searchModel = new EntEmpleadosSearch ();
 		$dataProvider = $searchModel->searchPagos ( Yii::$app->request->queryParams, $fch);
 		
-		return $this->render ( 'index', [ 
+		return $this->render ( 'pagosRealizados', [ 
 				'searchModel' => $searchModel,
-				'dataProvider' => $dataProvider 
+				'dataProvider' => $dataProvider,
+				'fch'=>$fch
 		] );
+	}
+	
+	public function actionPagoEmpleadoFecha($id, $idPago){
+		
+		$ultimoPago = WrkPagosEmpleados::find()->where(['id_empleado'=>$id, 'id_pago_empleado'=>$idPago])->orderBy('fch_pago DESC')->one();
+		
+		$empleado = EntEmpleados::find()->where(['id_empleado'=>$id])->one();
+		
+		$deducciones = WrkDeduccionesEmpleado::find ()->where ( [
+				'id_empleado' => $id,
+				'id_nomina'=>$ultimoPago->id_pago_empleado
+		] )->all ();
+		$extras = WrkPagosExtras::find ()->where ( [
+				'id_empleado' => $id,
+				'id_nomina'=>$ultimoPago->id_pago_empleado,
+				'b_deposito'=>0
+		] )->all ();
+		
+		$depositos = WrkPagosExtras::find ()->where ( [
+				'id_empleado' => $id,
+				'id_nomina'=>$ultimoPago->id_pago_empleado,
+				'b_deposito'=>1
+		] )->all ();
+		
+		
+		return $this->render ( 'pagoEmpleado', [
+				'empleado'=>$empleado,
+				'deducciones' => $deducciones,
+				'extras' => $extras ,
+				'ultimoPago'=>$ultimoPago,
+				'depositos'=>$depositos
+		] );
+		
 	}
 }

@@ -60,7 +60,7 @@ class WrkPagosEmpleados extends \yii\db\ActiveRecord
             'id_nomina' => 'Id Nomina',
             'id_sucursal' => 'Id Sucursal',
             'id_tipo_contrato' => 'Id Tipo Contrato',
-            'fch_pago' => 'Fch Pago',
+            'fch_pago' => 'Fch de $',
         ];
     }
 

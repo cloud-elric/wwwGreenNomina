@@ -44,10 +44,10 @@ class EntEmpleados extends \yii\db\ActiveRecord
     {
         return [
             [['id_sucursal', 'id_tipo_contrato', 'id_nomina', 'num_empleado', 'b_habilitado'], 'integer'],
+        		
             [['txt_nombre'], 'required'],
             [['txt_observaciones'], 'string'],
             [['fch_alta', 'fch_baja'], 'safe'],
-            
             [['id_nomina'], 'exist', 'skipOnError' => true, 'targetClass' => CatNominas::className(), 'targetAttribute' => ['id_nomina' => 'id_nomina']],
             [['id_sucursal'], 'exist', 'skipOnError' => true, 'targetClass' => CatSucursales::className(), 'targetAttribute' => ['id_sucursal' => 'id_sucursal']],
             [['id_tipo_contrato'], 'exist', 'skipOnError' => true, 'targetClass' => CatTiposContratos::className(), 'targetAttribute' => ['id_tipo_contrato' => 'id_tipo_contrato']],
@@ -62,13 +62,13 @@ class EntEmpleados extends \yii\db\ActiveRecord
         return [
             'id_empleado' => 'Id Empleado',
             'id_sucursal' => 'Sucursal',
-            'id_tipo_contrato' => 'Tipo Contrato',
-            'id_nomina' => 'Nomina',
+            'id_tipo_contrato' => 'Tipo de ejecutivo',
+            'id_nomina' => '-',
             'txt_nombre' => 'Nombre',
             'txt_observaciones' => 'Observaciones',
             'txt_rfc' => 'Rfc',
             'num_empleado' => 'Num Empleado',
-            'num_seguro_social' => 'Num Seguro Social',
+            'num_seguro_social' => 'NSS',
             'fch_alta' => 'Fecha Alta',
             'fch_baja' => 'Fecha Baja',
             'b_habilitado' => 'B Habilitado',

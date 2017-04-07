@@ -7,12 +7,14 @@ use app\models\WrkPagosEmpleados;
 use yii\helpers\Url;
 use app\models\Utils;
 
-$this->title = 'Pagos extras';
+$this->title = 'Depositos';
 $this->params['breadcrumbs'][] = ['label' => 'Empleados', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => 'Pagos', 'url' => ['pagos-extras?id='.$extras->id_empleado]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-
+<div class="panel panel-default">
+  <div class="panel-heading"><h1><?= Html::encode($empleadoV->txt_nombre) ?></h1></div>
+  <div class="panel-body">
 <?php $form = ActiveForm::begin([]); ?>
     
     <?= $form->field($extras, 'id_empleado')->hiddenInput(['value' => $extras->id_empleado])->label(false)?>
@@ -33,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //     	var_dump($fch_correcta);
 //     	var_dump($arreglo);exit();
     ?>
-    <?=  $form->field($extras, 'id_nomina')->dropDownList(ArrayHelper::map($fch_correcta, 'id_pago_empleado', 'fch_pago')) ?>
+    <?=  $form->field($extras, 'id_nomina')->dropDownList(ArrayHelper::map($fch_correcta, 'id_pago_empleado', 'fch_pago'))->label('Fecha $') ?>
     
     <?= $form->field($extras, 'txt_concepto')->textInput(['maxlength' => true])?>
 	
@@ -75,3 +77,4 @@ $this->params['breadcrumbs'][] = $this->title;
 
 \yii\widgets\Pjax::end ();
 ?>
+</div></div>

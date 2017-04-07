@@ -9,14 +9,17 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <?php \yii\widgets\Pjax::begin(); ?>
-    
+
+<div class="panel panel-default">
+  <div class="panel-heading"><h1><?= Html::encode($empleado->txt_nombre) ?></h1></div>
+  <div class="panel-body">
 <?= GridView::widget([
 	'dataProvider' => $dataProvider,
     //'filterModel' => $searchModel,
     'columns' => [
     	['class' => 'yii\grid\SerialColumn'],
         [
-        	'attribute' => 'fecha de pago',
+        	'attribute' => 'fecha de $',
         	'format' => 'raw',
         	'value' => function($data){
         		$data->fch_pago = Utils::changeFormatDate($data->fch_pago);
@@ -29,6 +32,6 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]
 ]); 
-
 \yii\widgets\Pjax::end ();
 ?>
+</div></div>
