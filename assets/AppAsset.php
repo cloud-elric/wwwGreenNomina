@@ -19,8 +19,10 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         'css/site.css',
+    	'plugins/sweetAlert/css/sweetalert.css',
     ];
     public $js = [
+    	'plugins/sweetAlert/js/sweetalert.min.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',
