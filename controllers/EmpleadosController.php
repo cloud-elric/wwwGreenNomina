@@ -127,14 +127,23 @@ class EmpleadosController extends Controller {
 		
 		if ($model->load ( Yii::$app->request->post () )) {
 			$model->fch_alta = Utils::changeFormatDateInput ( $model->fch_alta );
+			$model->txt_usuario = $this->random_username($_POST['EntEmpleados']['txt_nombre']);
+			$model->txt_password = $this->randomPassword();
+			$model->txt_rfc = $_POST['EntEmpleados']['txt_rfc'];
+			$model->num_seguro_social = $_POST['EntEmpleados']['num_seguro_social'];
 			if ($model->save ()) {
 				$model2->id_empleado = $model->id_empleado;
 				$model3->id_empleado = $model->id_empleado;
-				if ($model2->load ( Yii::$app->request->post () ) && $model2->save ()) {
-					if ($model3->load ( Yii::$app->request->post () ) && $model3->save ()) {
-						return $this->redirect ( [ 
+				$model2->txt_numero_cuenta = $_POST['EntDatosBancarios']['txt_numero_cuenta'];
+				$model2->txt_clabe = $_POST['EntDatosBancarios']['txt_clabe'];
+				$model2->id_banco = $_POST['EntDatosBancarios']['id_banco'];
+				if($model2->save()){
+					$model3->txt_telefono_contacto = $_POST['EntEmpleadosContactos']['txt_telefono_contacto'];
+					$model3->txt_mail_contacto = $_POST['EntEmpleadosContactos']['txt_mail_contacto'];
+					if($model3->save()){
+						return $this->redirect ( [
 								'view',
-								'id' => $model->id_empleado 
+								'id' => $model->id_empleado
 						] );
 					}
 				}
@@ -146,6 +155,27 @@ class EmpleadosController extends Controller {
 					'model3' => $model3 
 			] );
 		}
+	}
+	
+	public function random_username($string) {
+		$pattern = " ";
+		$firstPart = strstr ( strtolower ( $string ), $pattern, true );
+		$secondPart = substr ( strstr ( strtolower ( $string ), $pattern, false ), 0, 3 );
+		$nrRand = rand ( 0, 100 );
+	
+		$username = trim ( $firstPart ) . trim ( $secondPart ) . trim ( $nrRand );
+		return $username;
+	}
+	public function randomPassword() {
+		#$alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+		$alphabet = 'abcdefghijklmnopqrstuvwxyz';
+		$pass = array (); // remember to declare $pass as an array
+		$alphaLength = strlen ( $alphabet ) - 1; // put the length -1 in cache
+		for($i = 0; $i < 8; $i ++) {
+			$n = rand ( 0, $alphaLength );
+			$pass [] = $alphabet [$n];
+		}
+		return implode ( $pass ); // turn the array into a string
 	}
 	
 	/**
@@ -164,13 +194,23 @@ class EmpleadosController extends Controller {
 				'id_empleado' => $id 
 		] )->one ();
 		
-		if ($model->load ( Yii::$app->request->post () )) {
+		if ($model->load ( Yii::$app->request->post () ) && $model2->load ( Yii::$app->request->post () ) && $model3->load ( Yii::$app->request->post () )) {
+			$model->txt_rfc = $_POST['EntEmpleados']['txt_rfc'];
+			$model->num_seguro_social = $_POST['EntEmpleados']['num_seguro_social'];
 			$model->fch_alta = Utils::changeFormatDateInput ( $model->fch_alta );
-			if ($model->save ()) {
-				return $this->redirect ( [ 
-						'view',
-						'id' => $model->id_empleado 
-				] );
+			if ($model->save () /*&& $model2->save() && $model3->save()*/) {
+				$model2->txt_numero_cuenta = $_POST['EntDatosBancarios']['txt_numero_cuenta'];
+				$model2->txt_clabe = $_POST['EntDatosBancarios']['txt_clabe'];
+				if($model2->save()){
+					$model3->txt_telefono_contacto = $_POST['EntEmpleadosContactos']['txt_telefono_contacto'];
+					$model3->txt_mail_contacto = $_POST['EntEmpleadosContactos']['txt_mail_contacto'];
+					if($model3->save()){
+						return $this->redirect ( [ 
+							'view',
+							'id' => $model->id_empleado 
+						] );
+					}
+				}
 			}
 		} else {
 			return $this->render ( 'update', [ 
