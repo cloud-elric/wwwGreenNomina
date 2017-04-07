@@ -21,7 +21,8 @@ $(document).ready(function() {
 });
 
 function uploadFile(){
-	
+	$('.js-data-excel .panel-body').html('');
+	 $('.js-data-excel .panel-heading h3').html('');
 	var form = document.getElementById('js-form-upload-excel');
 	// var data = new FormData(form);
 
@@ -36,7 +37,7 @@ function uploadFile(){
 		url: basePath+'site/upload-file',
 		type : "POST",
         data : ajaxData,
-        dataType:'HTML',
+        dataType:'JSON',
         processData : false,
         contentType : false,
         cache : false,
@@ -80,14 +81,21 @@ function uploadFile(){
         },
         error : function() {
             alert("Failed");
+            l.stop();
         },
 		success:function(resp){
 			
 			 swal("Listo",
 						"Se ha cargado la información correctamente.",
 						"success");
+			 $('.js-data-excel .panel-heading h3').html('Usuarios sin correo electronico');
+			 
+			 $.each(resp.noValid, function (i, data) {
+				 console.log(resp.noValid[i]);
+				 $('.js-data-excel .panel-body').append(resp.noValid[i]);
+				})	
+				
 			
-			//$('.js-data-excel').html(resp);
 			l.stop();
 			
 		}

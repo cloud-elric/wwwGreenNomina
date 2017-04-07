@@ -213,7 +213,10 @@ class SiteController extends Controller {
 	/**
 	 */
 	public function actionUploadFile() {
-		Yii::$app->response->format = Response::FORMAT_HTML;
+		Yii::$app->response->format = Response::FORMAT_JSON;
+		
+		$responseContactos = [];
+		
 		ini_set ( 'max_execution_time', 36000 );
 		ini_set ( 'memory_limit', '512M' );
 		$alias = Yii::getAlias ( '@app' ) . '/vendor/PHPExcel/Classes';
@@ -256,15 +259,28 @@ class SiteController extends Controller {
 					$pago = $this->loadPago ( $objWorksheet, $row, $empleado->id_empleado, $banco->id_banco, $sucursales->id_sucursal, $tiposContratos->id_tipo_contrato, $nomina->id_nomina );
 					$this->loadPagosExtras ( $objWorksheet, $row, $empleado->id_empleado, $pago->id_pago_empleado );
 					$this->loadDeducciones ( $objWorksheet, $row, $empleado->id_empleado, $pago->id_pago_empleado );
+					
+					if($contacto->txt_mail_contacto){
+						$this->enviarEmailApi($contacto->txt_mail_contacto, $empleado->txt_nombre);	
+					}else{
+						$responseContactos[] = $empleado->txt_nombre;
+					}
+					
 				} else {
-					echo $row;
+					//echo $row;
 					// print_r($empleado->errors);
 				}
+				
+				
+				
 			}
-			echo '';
+			
 		}
 		
-		// return ['status'=>'error'];
+		$response['status'] = ['success'];
+		$response['noValid'] = $responseContactos;
+		
+		 return $response;
 	}
 	
 	/**
@@ -700,6 +716,46 @@ class SiteController extends Controller {
 	}
 	public function actionGenerarPass() {
 		echo Yii::$app->security->generatePasswordHash ( '98765432' );
+	}
+	/**
+	 * Envia por medio de mad mimi un correo
+	 */
+	public function enviarEmailApi($email, $nombre) {
+	
+	
+		$url = Yii::$app->urlManager->createAbsoluteUrl ( [
+				'site/login-empleados'
+		] );
+	
+		$string = Yii::$app->mailer->render('render/notificacion', ['url' =>$url ], 'layouts/html.php');
+	
+	
+		//$string = Yii::$app->mailer->render('path/to/view', ['params' => 'foo'], 'path/to/layout');
+		//
+		// A very simple PHP example that sends a HTTP POST to a remote site
+		//
+		$ch = curl_init ();
+	
+	
+		curl_setopt ( $ch, CURLOPT_URL, "https://api.madmimi.com/mailer" );
+		curl_setopt ( $ch, CURLOPT_POST, 1 );
+		curl_setopt ( $ch, CURLOPT_POSTFIELDS, "username=humberto@2gom.com.mx&api_key=eadc1b012973cd02f1b38722f9839baa&promotion_name=Percepciones&recipient=".$nombre." <".$email.">&subject=Revisa las percepciones de tu pago&from=no-reply@publicidadgreen.com&raw_html=".urlencode($string)  );
+	
+		// in real life you should use something like:
+		// curl_setopt($ch, CURLOPT_POSTFIELDS,
+		// http_build_query(array('postvar1' => 'value1')));
+	
+		// receive server response ...
+		curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+	
+		$server_output = curl_exec ( $ch );
+	
+		curl_close ( $ch );
+		//echo $server_output;
+		// further processing ....
+		if ($server_output == "OK") {
+		} else {
+		}
 	}
 	
 	/**

@@ -233,9 +233,15 @@ $this->registerJsFile ( '@web/js/subirArchivo.js', [
 	<input type="hidden" name="ajax" value="1"></form>
 </div>
 
+<br><br><br><br>
 
-
-<div class="js-data-excel">
-
+<div class="col-md-6 col-md-offset-3 js-data-excel">
+	<div class="panel">
+	<div class="panel-heading">
+	<h3></h3>
+	</div>
+		<div class="panel-body">
+		</div>
+	</div>
 
 </div>
