@@ -44,17 +44,21 @@ $this->registerJsFile(
 				<div class="modal-body">
 					<div class="container-fluid">
 						<div class="row">
-
-				<div class="form-group">
-      <?=$form->field($contact, 'nombre')->textInput(['class'=>'form-control'])->label('Nombre completo')?>
-      </div>
-
+							
 							<div class="form-group">
-      <?=$form->field($contact, 'email')->textInput(['class'=>'form-control'])?>
-      </div>
+      							<p>Para poder atenderte, verifica antes tu estado bancario, 
+      							que tu cuenta no este bloqueada y haz un recuento de tus últimos gastos, 
+      							pues a veces sucede que el deposito paso antes de algún retiro en cajero.</p>
+      						</div>
 							<div class="form-group">
-      <?=$form->field($contact, 'description')->dropDownList(['Mi total no coincide' => 'Mi total no coincide',  'Duda en descuentos' => 'Duda en descuentos','Duda fijos'=>'Duda fijos', 'Duda variables'=>'Duda variables'],['prompt'=>'Seleccionar problema','class'=>'form-control'])->label('¿Tienes un problema?')?>
-      </div>
+			      				<?=$form->field($contact, 'nombre')->textInput(['class'=>'form-control'])->label('Nombre completo')?>
+			     			</div>
+							<div class="form-group">
+      							<?=$form->field($contact, 'email')->textInput(['class'=>'form-control'])?>
+      						</div>
+							<div class="form-group">
+     				 			<?=$form->field($contact, 'description')->dropDownList(['Mi total no coincide' => 'Mi total no coincide',  'Duda en descuentos' => 'Duda en descuentos','Duda fijos'=>'Duda fijos', 'Duda variables'=>'Duda variables'],['prompt'=>'Seleccionar problema','class'=>'form-control'])->label('¿Tienes un problema?')?>
+      						</div>
 
 						</div>
 					</div>
