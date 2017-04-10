@@ -48,7 +48,7 @@ use app\models\Utils;
     
     <?= $form->field($model3, 'txt_telefono_contacto')->textInput(['maxlength' => 10]) ?>
 
-    <?= $form->field($model3, 'txt_mail_contacto')->textInput(['maxlength' => 10]) ?>
+    <?= $form->field($model3, 'txt_mail_contacto')->textInput(['maxlength' => 100]) ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Crear' : 'Actualizar', ['id' => 'btn_submit_empleado', 'class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
