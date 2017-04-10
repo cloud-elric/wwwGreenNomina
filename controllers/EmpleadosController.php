@@ -338,10 +338,12 @@ class EmpleadosController extends Controller {
 				'id_pago_extra' => $id 
 		] )->one ();
 		$id = $extra->id_empleado;
+		$idPago = $extra->id_nomina;
 		$extra->delete ();
 		return $this->redirect ( [ 
 				'agregar-pago',
-				'id' => $id 
+				'id' => $id,
+				'idPago' => $idPago
 		] );
 	}
 	
