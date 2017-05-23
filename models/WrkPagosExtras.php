@@ -34,7 +34,7 @@ class WrkPagosExtras extends \yii\db\ActiveRecord
     {
         return [
             [['id_empleado', 'id_nomina', 'txt_concepto'], 'required'],
-            [['id_empleado', 'id_nomina', 'num_monto', 'b_deposito'], 'integer'],
+            [['id_empleado', 'id_nomina', 'b_deposito'], 'integer'],
             [['txt_concepto'], 'string', 'max' => 200],
             [['id_nomina'], 'exist', 'skipOnError' => true, 'targetClass' => WrkPagosEmpleados::className(), 'targetAttribute' => ['id_nomina' => 'id_pago_empleado']],
             [['id_empleado'], 'exist', 'skipOnError' => true, 'targetClass' => EntEmpleados::className(), 'targetAttribute' => ['id_empleado' => 'id_empleado']],
